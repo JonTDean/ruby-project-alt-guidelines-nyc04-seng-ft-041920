@@ -8,3 +8,6 @@ gem "pry"
 gem "rake"
 gem "require_all"
 gem "faker"
+
+# Custom Gems
+gem 'bcrypt'
