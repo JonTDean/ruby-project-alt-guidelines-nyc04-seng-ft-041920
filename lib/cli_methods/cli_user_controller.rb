@@ -3,10 +3,10 @@ require_relative '../models/cli'
 require 'io/console'
 
 
-class CLIUserController
-    attr_accessor :cli
-    private :cli=                                   # Found technique to use private with symbols
-    @@current_user = nil                            # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
+class CLIUserController 
+    attr_accessor :cli                              # Found technique to use private with symbols
+    private :cli=                                   # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
+    @@current_user = nil                            
 
     # Starts new CLIUser State Management Instance
     def initialize
@@ -15,11 +15,15 @@ class CLIUserController
     end
 
     def self.current_user?
-        @@current_user
+        @@current_user                              # Passes Current User Object
     end
     
     def self.my_id?
-        @@current_user.id
+        @@current_user.id                           # Passes Current User ID
+    end
+
+    def self.my_name?                               # Passes Current User Name
+        @@current_user.name
     end
     
     # logs user into account
