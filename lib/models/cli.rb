@@ -1,22 +1,18 @@
 # Main Methods and Important CLI Calls :: OVERHEAD HANDLER FOR TTY 
 class CLI
-    attr_accessor :prompt, :reader
-
-    def initialize 
-        create_prompt
-        create_reader
-    end
+    @@prompt = TTY::Prompt.new
+    @@reader = TTY::Reader.new
 
     # Prompt
     ## Allows for use of TTY::Prompt across multiple Classes
-    def create_prompt
-        @prompt = TTY::Prompt.new
+    def self.prompts
+        @@prompt
     end
 
     # Reader
     ## Allows for use of TTY::Reader across multiple Classes
-    def create_reader
-        @reader = TTY::Reader.new
+    def self.reader
+        @@reader
     end
 
     # Loading Bar
@@ -46,11 +42,11 @@ end
 
 # Helper Methods
 class CLIHelper
-    @@y_n = %w(Yes No) # Array for "Yes or No"
+    @@y_n_e = %w(Yes No Quit) # Array for "Yes, No, Quit"
 
 
-    # Displays Yes or No
-    def self.y_n
-        @@y_n
+    # Displays Yes, No, Quit
+    def self.y_n_e
+        @@y_n_e
     end
 end
