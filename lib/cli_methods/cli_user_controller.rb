@@ -18,6 +18,10 @@ class CLIUserController
         @@current_user
     end
     
+    def self.my_id?
+        @@current_user.id
+    end
+    
     # logs user into account
     def self.log_in_to_account(logged_in_user)  
         @@current_user = logged_in_user              # Sets State to Logged In
