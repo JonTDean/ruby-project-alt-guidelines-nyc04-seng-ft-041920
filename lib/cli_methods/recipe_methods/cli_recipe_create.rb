@@ -1,10 +1,9 @@
 require_relative '../../models/recipe'
 require_relative '../../models/cli'
-# require_relative '../user_methods'
-# require_relative '../../models/user'
 
-class RecipeCreation
+class RecipeController
     def self.ask_for_recipe_details
+
         title = CLI.prompts.ask("What is the name of your recipe?")
 
         # check all the recipes in the database
@@ -15,7 +14,28 @@ class RecipeCreation
   
         category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Other))
 
-        Recipe.create(user_id: CLIUserController.current_user?.id, title: title, category:category)
+        recipe = Recipe.create(user_id: CLIUserController.current_user?.id, title: title, category:category)
+        recipe_id = recipe.id
+
+        # ask for all ingredients etc
+        # result = CLI.prompts.collect do 
+        ingredient = IngredientController.choose_an_ingredient      # Returns Ingredient Object
+        unit = UnitController.choose_a_unit
+        amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
+       
+        Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
+        # end
+
+        while CLI.prompts.yes?("Would you like to add another ingredient?")
+            ingredient = IngredientController.choose_an_ingredient      # Returns Ingredient Object
+        unit = UnitController.choose_a_unit
+        amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
+        Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
+        end
+        #and push to tables with correct ids
+
+        CLI.prompts.ok("You finished creating the recipe")
+        CLI.prompts.say(recipe.view_recipe.join("\n"))
     end
 
     #action could be delete, update, view 
@@ -30,18 +50,48 @@ class RecipeCreation
         
         when "view"
             #view recipe
-            recipe.view_recipe.each{|element| puts element}
+            CLI.prompts.say(recipe.view_recipe.join("\n"))
 
         when "update"
+
             #update recipe
             item = CLI.prompts.select("Which item would you like to #{action}?", recipe.view_recipe)
-            item_part = CLI.prompts.select("Which part would you like to #{action}?", item.split(" "))
+            index = recipe.view_recipe.index(item)
+            puts index
+            item_part = CLI.prompts.select("Which part would you like to #{action}?", item.split(" ", 3)) #accounts for ingredients that are more than one word
             #actually update it
+            # if it is the amount
+
+            if item_part == item.split(" ", 3)[0]
+                #amount
+                new_amount = CLI.prompts.ask('What would you like to change it to?', required: true)
+                # update the amount in the corresponding order
+                recipe.orders[index].update(amount: new_amount)
+
+                #############add something to make sure they don't leave it blank
+            elsif item_part == item.split(" ", 3)[1]
+                #unit
+                #make this a color so easier to see??
+                CLI.prompts.ok("You are currently updating #{item}")
+                new_unit = UnitController.choose_a_unit
+                recipe.orders[index].update(unit_id: new_unit.id)
+
+                # display somehow to show it was changed
+                puts "Your edit was successful!"
+                puts "#{recipe.orders[index].amount} #{Unit.find(recipe.orders[index].unit_id).name} #{Ingredient.find(recipe.orders[index].ingredient_id).name}"
+            else
+                #ingredient
+                puts "You are currently updating #{item}"
+                new_ingredient = IngredientController.choose_an_ingredient
+                recipe.orders[index].update(ingredient_id: new_ingredient.id)
+            end
+
             
         else
             #shouldn't get here
             puts "reached else in case statement"
         end
+
     end
 
     

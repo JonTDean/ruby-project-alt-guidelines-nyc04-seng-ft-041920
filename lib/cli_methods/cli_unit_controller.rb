@@ -1,8 +1,8 @@
 require_relative '../models/unit'
 require_relative './cli_user_controller'
 
-class IngredientController      
-    @name = Unit.all.map(&:name) # Returns all of the Ingredient names from Ingredient table
+class UnitController      
+    @name = Unit.all.map(&:name) # Returns all of the Unit names from Unit Table
 
     def self.choose_a_unit       # Returns Unit Object
         choice = CLI.prompts.select("Please choose a Unit", @name)                  # Asks user to choose a Unit
