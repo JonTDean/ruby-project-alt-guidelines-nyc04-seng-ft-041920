@@ -8,15 +8,13 @@ class SignIn
 
     def self.log_in?(username)      
         # If name is in database then prompt for password else prompt for create an account
+        
         if User.exists?(name: username)                     # Checks to see if the User Exists 
             @current_user = User.find_by(name: username)    # Grabs user object
-            # id = current_user.id                          # Grabs user ID
-            # name = current_user.name                      # Grabs user Name
-            # password = current_user.password              # Grabs user password
 
-            # Debug.user_object_check(current_user, id, name, password)
+            # Debug.user_object_check(current_user, current_user.id, current_user.name, current_user.password)
             @is_user = self.ask_for_password                # Bring up User Password Prompt
-            log_in                                           # Attempt Login
+            log_in                                          # Attempt Login
         else
             UserAccountCreation.ask_user_create?            # Goes to Account Creation
         end

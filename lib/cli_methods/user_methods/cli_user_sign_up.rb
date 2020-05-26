@@ -15,8 +15,10 @@ class UserAccountCreation
         case answer
         when /yes|y/                                # Checks input for "y", "yes"
             self.account_creation 
-        when /n|no/                                 # Checks input for "n", "no"
-            abort( "Exiting Program.... Goodbye!")
+        when /n|no/                                 # Checks input for "n", "no (Will take you back to the Main Menu."
+            puts "Heading Back to the Main Menu..."
+            CLIUser.start
+            # abort( "Exiting Program.... Goodbye!")
         else
             self.force_yes_or_no_check(answer)
         end

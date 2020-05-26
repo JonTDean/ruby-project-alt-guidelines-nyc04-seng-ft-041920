@@ -24,5 +24,3 @@ class CommandLineInterface
     end
 
 end
-
-# user_menu = CommandLineInterface.new(who_are_you?)
