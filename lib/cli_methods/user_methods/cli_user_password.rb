@@ -1,5 +1,5 @@
 require 'bcrypt' # Had to run 'gem pristine bcrypt' in order for it to run
-require_relative '../../models/Interface'
+require_relative '../../models/cli'
 
 class UserPassword
     
@@ -29,7 +29,7 @@ class UserPassword
     end
 
     private
-    @cli = Interface.new
+    @cli = CLI.new
     
     # Checks for correct password
     def self.secure_password(password)

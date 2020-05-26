@@ -10,6 +10,11 @@ gem "require_all"
 gem "faker"
 
 # Custom Gems
+## In Use
 gem 'bcrypt'
 gem 'tty-prompt'
 gem 'tty-progressbar'
+
+## Not In Use
+gem 'tty-reader'
+

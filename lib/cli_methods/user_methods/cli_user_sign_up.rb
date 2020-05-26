@@ -1,18 +1,17 @@
 require_relative '../../models/user'
-require_relative '../../models/interface'
+require_relative '../../models/cli'
 
 class UserAccountCreation
-    @cli = Interface.new
+    @cli = CLI.new
 
     def initialize 
-        
         self.ask_user_create?
     end
 
     #Ask to initate user account creation
     def self.ask_user_create?
-        ask_user = "You don't have an account with us! Would you like to create an account? Enter Yes[y] or No [n]."
-        answer = @cli.prompt.select(ask_user, Interface.y_n) # Prompts user for account creation
+        ask_user = "You don't have an account with us! Would you like to create an account? Enter Yes(Create Account), No(Go back to Main Menu), or Quit(Exit Program)."
+        answer = @cli.prompt.select(ask_user, CLIHelper.y_n) # Prompts user for account creation
 
         # Checks Answer to proceed to the next step
         self.yes_or_no?(answer)
@@ -25,16 +24,18 @@ class UserAccountCreation
         when /Yes/                                          # if "Yes" goes to account creation
             self.account_creation 
         when /No/                                           # Else if "No" Will take you back to the Main Menu."
-            Interface.back_to_log_in_menu
+            CLI.back_to_log_in_menu
+        when /Quit/
+            abort("Goodbye!")
         end
     end
 
     # Account Creation Handler
     def self.account_creation
         new_user_name = self.create_username                     # Creates Username
-        password = UserPassword.create_password             # Creates Password
+        password = UserPassword.create_password                  # Creates Password
 
-        # Delete message after 
+        # Delete DeanbugMenu after setting up actual menu
         DeanbugMenu.correct_settings(new_user_name, password)
 
         self.account_to_table(new_user_name, password)           # Saves Account to table
@@ -61,7 +62,7 @@ class UserAccountCreation
     def self.account_to_table(user_name, password)
         puts "Account Created! Going back to main menu."
         User.create(name: user_name, password: password)        # Saves User to user.db
-        Interface.back_to_log_in_menu                           # Goes back to main menu
+        CLI.back_to_log_in_menu                                 # Goes back to main menu
     end
     
 end

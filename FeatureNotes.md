@@ -6,6 +6,10 @@ Quick Notes:
 
 * I converted User Auth to use the 'TTY' Gem for the prompts, reduced over 100+ lines of code.
 
+#### Quick TODO
+
+Clear the Database, this way we can work with a new DataSet.
+
 ### 1A: Login System
 
 * Login to Account (Account Directly connected to Existing User Tables)
@@ -44,6 +48,7 @@ Quick Notes:
 2. Delete User:
  No way at all to Delete User
 
+3. Downcase the incoming input of the user for new account creations
 --------------------------------------------
 
 ## 2: Debug System - Deanbug

@@ -83,6 +83,7 @@ DEPENDENCIES
   sqlite3 (~> 1.3.13)
   tty-progressbar
   tty-prompt
+  tty-reader
 
 BUNDLED WITH
    2.1.4
