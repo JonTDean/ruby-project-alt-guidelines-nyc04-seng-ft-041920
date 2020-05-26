@@ -2,9 +2,9 @@ require_relative '../../models/user'                        # This gave me so ma
 require_relative './cli_user_sign_up'
 
 class SignIn
-    attr_reader :current_user, :is_user, :cli, :is_valid
+    attr_reader :is_user, :cli, :is_valid
     private :is_user, :is_valid
-    
+
     def self.log_in?(username)      
         # If name is in database then prompt for password else prompt for create an account
         if User.exists?(name: username)                     # Checks to see if the User Exists 
@@ -43,7 +43,7 @@ class SignIn
 
     # Grabs password then performs a check
     def self.password_check(typed_password)
-        if  UserPassword.check_password(typed_password, @current_user)                  # Checks if user password is correct
+        if  UserPassword.check_password(typed_password, @current_user)                 # Checks if user password is correct
             true
         else                                                                            # If user password is incorrect then ask for password recursively.
             password = @cli.prompt.mask("Please Enter The correct Password.") do |q|
