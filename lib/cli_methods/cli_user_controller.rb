@@ -7,7 +7,6 @@ class CLIUserController
     attr_accessor :current_user, :cli
     private :current_user=, :cli=                   # Found technique to use private with symbols
                                                     # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
-    # @current_user
     
     # Starts new CLIUser State Management Instance
     def initialize    
