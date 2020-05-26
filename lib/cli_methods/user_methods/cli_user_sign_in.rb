@@ -2,9 +2,10 @@ require_relative '../../models/user'                        # This gave me so ma
 require_relative './cli_user_sign_up'
 
 class SignIn
-    attr_reader :current_user, :is_user
-    private :is_user
-
+    attr_reader :current_user, :is_user, :cli, :is_valid
+    private :is_user, :is_valid
+    
+    
 
     def self.log_in?(username)      
         # If name is in database then prompt for password else prompt for create an account
@@ -12,9 +13,10 @@ class SignIn
         if User.exists?(name: username)                     # Checks to see if the User Exists 
             @current_user = User.find_by(name: username)    # Grabs user object
 
-            # Debug.user_object_check(current_user, current_user.id, current_user.name, current_user.password)
+            # # Custom Debug class to look at User variables goes here
+
             @is_user = self.ask_for_password                # Bring up User Password Prompt
-            log_in                                          # Attempt Login
+            self.set_user_state                             # Attempt Login
         else
             UserAccountCreation.ask_user_create?            # Goes to Account Creation
         end
@@ -22,46 +24,41 @@ class SignIn
 
 
     private 
+    @cli = Interface.new                                    # Sets CLI interface to only be used via this class
+    @is_valid = "Incorrect Password!"                       # Container for local class variable, need to delete after refactor
 
     # Assigns CLI_User a user object table
-    def self.log_in
+    def self.set_user_state
         if @is_user
             CLIUser.log_in_to_account(@current_user)
+        else
+            puts "User Account Error"                       # Error Shouldn't occur but just in case
         end
     end
 
     # Asks for Password then does comparison check for simple Authorization
     def self.ask_for_password
-        puts "What is your Password (Case-Sensitive!)."
-        self.get_password
+        password = @cli.prompt.ask("What is your password") do |q|
+            q.required true                                                             # Requires Special Properties defined at <q>
+            q.validate /^[0-9a-zA-Z]*$/                                                 # Performs comparison check, if true validate is true if false validate is false
+            q.messages[:valid?] = @is_valid                                             # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
+        end
+
+        self.password_check(password)
     end
 
     # Grabs password then performs a check
-    def self.get_password
-        password_input = STDIN.gets.chomp
-        if  UserPassword.check_password(password_input, @current_user)                  # Checks if user password is correct
-            # puts "Correct Password!"
+    def self.password_check(typed_password)
+        if  UserPassword.check_password(typed_password, @current_user)                  # Checks if user password is correct
             true
-        else
-            while UserPassword.check_password(password_input, @current_user) == false   # If user password is incorrect then the
-                puts "please put the correct password!"
-                password_input = STDIN.gets.chomp
+        else                                                                            # If user password is incorrect then ask for password recursively.
+            password = @cli.prompt.ask("Please Enter The correct Password.") do |q|
+                q.required true                                                         # Requires Special Properties defined at <q>
+                q.validate /^[0-9a-zA-Z]*$/                                             # Performs comparison check, if true validate is true if false validate is false
+                q.messages[:valid?] = @is_valid                                         # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
             end
-            # puts "Correct Password!"
-            true
-        end
-                
+            self.password_check(password)
+        end          
     end
 
-    # Custom Debug class to verify proper User variables
-    class Debug 
-        def self.user_object_check(object, id, name, password)
-            puts "===============DEBUG==============="
-            puts "The User Object is: #{object}"
-            puts "The ID is: #{id}"
-            puts "The name is: #{name}"
-            puts "The password is: #{password}"
-            puts "===============DEBUG==============="
-        end
-    end
 end

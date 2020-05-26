@@ -6,21 +6,16 @@ require_relative 'cli_methods/cli_user.rb'
 # Pros: Neater Method calling, easier method organization
 # Cons: More Overhead, extra intricacy
 
-class CommandLineInterface
+class CLIMain
     # Goal is to have this be the main access point to the other menus.
     # Allows for scalability with additional menus/features
     # the screens can also be organized and called in a modular design
-
-    attr_reader :user_screen
-    @@Screens
-
-    def initialize(cli_args)
-        @user_screen = cli_args[:user_menu]
-        self.save << @user_screen
+    def initialize
+        start_User_Auth_Process
     end
-
-    def self.save
-        @@Screens << save
+    
+    def start_User_Auth_Process
+        CLIUser.new
     end
 
 end

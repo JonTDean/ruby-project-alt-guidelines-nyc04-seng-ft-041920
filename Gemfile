@@ -11,3 +11,5 @@ gem "faker"
 
 # Custom Gems
 gem 'bcrypt'
+gem 'tty-prompt'
+gem 'tty-progressbar'

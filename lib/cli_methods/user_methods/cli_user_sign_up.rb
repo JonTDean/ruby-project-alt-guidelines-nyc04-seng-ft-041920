@@ -1,81 +1,67 @@
 require_relative '../../models/user'
+require_relative '../../models/interface'
 
 class UserAccountCreation
-    
-    #Ask to initate user account
+    @cli = Interface.new
+
+    def initialize 
+        
+        self.ask_user_create?
+    end
+
+    #Ask to initate user account creation
     def self.ask_user_create?
-        puts "You don't have an account with us! Would you like to create an account? Enter Yes[y] or No [n]."
-        answer = STDIN.gets.chomp.downcase
+        ask_user = "You don't have an account with us! Would you like to create an account? Enter Yes[y] or No [n]."
+        answer = @cli.prompt.select(ask_user, Interface.y_n) # Prompts user for account creation
+
+        # Checks Answer to proceed to the next step
         self.yes_or_no?(answer)
     end
 
     private
-    # Yes or No handler
+    # Yes or No Event handler
     def self.yes_or_no?(answer)
         case answer
-        when /yes|y/                                # Checks input for "y", "yes"
+        when /Yes/                                          # if "Yes" goes to account creation
             self.account_creation 
-        when /n|no/                                 # Checks input for "n", "no (Will take you back to the Main Menu."
-            puts "Heading Back to the Main Menu..."
-            CLIUser.start
-            # abort( "Exiting Program.... Goodbye!")
-        else
-            self.force_yes_or_no_check(answer)
+        when /No/                                           # Else if "No" Will take you back to the Main Menu."
+            Interface.back_to_log_in_menu
         end
-    end
-
-    def self.force_yes_or_no_check(answer)
-        while !answer.match(/n|no|y|yes/)           # Checks input for "n", "no", "y", "yes"
-            puts "Invalid Response! type either Y or N"
-            answer = STDIN.gets.chomp.downcase
-        end
-        self.yes_or_no?(answer)                     # Returns Verified answer
     end
 
     # Account Creation Handler
     def self.account_creation
+        new_user_name = self.create_username                     # Creates Username
+        password = UserPassword.create_password             # Creates Password
 
-        new_user_name = self.create_username
-        password = UserPassword.create_password
+        # Delete message after 
+        DeanbugMenu.correct_settings(new_user_name, password)
 
-        # puts "+++++++++++++++++DEBUG++++++++++++++++++++++++"
-        # puts new_user_name
-        # puts password
-        # puts "++++++++++++++++++++++++++++++++++++++++++++++"
-
-        User.create(name: new_user_name, password: password)
+        self.account_to_table(new_user_name, password)           # Saves Account to table
     end
 
     # Username Helper Methods:
     
-    #  Username - Method Handler for Username Creation
+    # Username - Method Handler for Username Creation
     def self.create_username
-        puts "Lets Create an Account! In the following menus, enter what you want your name to be, and what you want your password to be!"
-        puts "What is your name? Letters only, no Synths Allowed!"
-
-        new_user_name = STDIN.gets.chomp.downcase   # Rake doesn't receive 'gets' only STDIN
-    
-        self.username_complexity_check(new_user_name)
-    end
-
-    # Username - Initiates Username Check
-    def self.username_complexity_check(username)
-        case username
-        when /^[a-zA-Z \s]*$/                       # Tight check for Spaces and Letters
-            username                                # Returns Username if check passes  
-        else                                        # Forces Username Check
-            self.reverify_username(username)
+        # Outside of cli.prompt.ask because it hits the edge of the cli
+        puts "==========================================================================================================================="
+        puts "Lets Create an Account! In the following menus, enter what you want your name to be, and what you want your password to be!" 
+        puts "==========================================================================================================================="
+        new_user_name =  @cli.prompt.ask("What is your name? Letters only: ") do |q|    # Prompts for User Name
+            q.required true                                                             # Requires Special Properties defined at <q>
+            q.validate /^[a-zA-Z]*$/                                                    # Performs comparison check, if true validate is true if false validate is false
+            q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase)"          # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
         end
+        
+        new_user_name
     end
     
-    # Username - Forces correct username complexity
-    def self.reverify_username(username)
-        while !username.match(/^[a-zA-Z \s]*$/)     # Allows for Firstname, Middlename, Etc.
-            puts "You have entered an illegal character! Please put an upper or lower case letter."
-            username = STDIN.gets.chomp
-        end
-        username
+    # Saves Account to table then goes to login menu
+    def self.account_to_table(user_name, password)
+        puts "Account Created! Going back to main menu."
+        User.create(name: user_name, password: password)        # Saves User to user.db
+        Interface.back_to_log_in_menu                           # Goes back to main menu
     end
-
- 
+    
 end

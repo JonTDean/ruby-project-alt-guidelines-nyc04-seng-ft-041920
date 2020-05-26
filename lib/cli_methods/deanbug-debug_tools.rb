@@ -83,17 +83,43 @@ class Deanbug
 
 end    
 
-class DeanbugMenu
-    # Placeholder Menu for the time being
+class DeanbugMenu # Collection of Custom Debug Menus
+    
+    # For use in <Class :: CLIUser> 
     def self.who_is?(user_name)
         puts "================================================DEBUG================================================"
         puts ""
         puts ""
         puts ""
-        puts "                      THE CURRENT USER THAT IS LOGGED IN IS #{user_name}"
+        puts "                      THE CURRENT USER THAT IS LOGGED IN IS #{user_name.name}"
+        puts ""
         puts ""
         puts ""
         puts "================================================DEBUG================================================"
+    end 
+
+    # For use in <Class :: Password>
+    def self.correct_settings(username, password)
+        puts "================================================DEBUG================================================"
+        puts ""
+        puts ""
+        puts "                                  THE CURRENT USER IS #{username}"
+        puts "                                THE CURRENT PASSWORD IS #{password}"
+        puts ""
+        puts ""
+        puts "================================================DEBUG================================================"
+    end
+
+    # For use in <Class :: SignIn>
+    def self.user_object_check(object, id, name, password)
+        puts "===============DEBUG==============="
+        puts ""
+        puts "The User Object is: #{object}"
+        puts "The ID is: #{id}"
+        puts "The name is: #{name}"
+        puts "The password is: #{password}"
+        puts ""
+        puts "===============DEBUG==============="
     end
 end
 
