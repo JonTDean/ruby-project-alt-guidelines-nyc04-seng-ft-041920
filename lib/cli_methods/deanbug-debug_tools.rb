@@ -28,7 +28,7 @@ class Deanbug
         input = STDIN.getch.downcase                      # Grabs user input
         puts "Got Input"
         if self.menu_check(input)                         # If user Input is correct
-            self.log_menu                        # Calls menu_check with input
+            self.log_menu                                 # Calls menu_check with input
         elsif !self.menu_check(input)                     # If user Input is not correct
             self.invalid_menu_response(input)             # Invalid response check until correct
         end
@@ -60,31 +60,31 @@ class Deanbug
         input = STDIN.getch.downcase
         case input 
         when /yes|y/                                      # If debug mode is on then display logs
-            ActiveRecord::Base.logger.level = 0
+            ActiveRecord::Base.logger.level = 0           # Debug mode On
             puts "Heading to Debug Log Menu..."
-            self.log_menu
+            self.log_menu                                 # Heads to Debug Log Menu
         when /no|n/                                       # If debug mode is not on then don't display logs
-            ActiveRecord::Base.logger.level = 1
-            puts "Heading back to Log Main Menu..."
-            self.log_menu
-        when /quit|q/
-            abort("Exiting Program... Goodbye!")
-        when /back|b/
-            puts "Heading to Debug Main Menu..."
-            self.main_menu
-        when /menu|m/
+            ActiveRecord::Base.logger.level = 1           # Debug mode Off
+            puts "Heading back to Log Main Menu..."       
+            self.log_menu                                 # Heads to Debug Log Menu
+        when /quit|q/                                     # Exits out of program
+            abort("Exiting Program... Goodbye!")          
+        when /back|b/                                     # Heads to Debug Main Menu
+            puts "Heading to Debug Main Menu..."            
+            self.main_menu  
+        when /menu|m/                                     # Heads to Start Menu
             puts "Heading to Main Menu"
             CLIUser.start
-        when !(/yes|y|no|n|quit|q|back|b|menu|m/)
+        when !(/yes|y|no|n|quit|q|back|b|menu|m/)         # Recursive toggle response
             "Please enter a valid response"
-            self.log_menu(toggle)
+            self.log_menu
         end
     end
 
 end    
 
 class DeanbugMenu
-
+    # Placeholder Menu for the time being
     def self.who_is?(user_name)
         puts "================================================DEBUG================================================"
         puts ""
@@ -95,4 +95,16 @@ class DeanbugMenu
         puts ""
         puts "================================================DEBUG================================================"
     end
+end
+
+class DeanbugQuick
+
+    def self.fail
+        puts false;"FAIL"       # Only the output of the last command that was executed will be displayed to the screen
+    end
+    
+    def self.success
+        puts true;"SUCCESS"     # Only the output of the last command that was executed will be displayed to the screen
+    end
+
 end
