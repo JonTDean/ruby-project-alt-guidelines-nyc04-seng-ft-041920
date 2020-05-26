@@ -9,4 +9,16 @@ class User < ActiveRecord::Base
     def select_user_recipe_by_title(action)
         @cli.prompt.select("Please select one of your recipes to #{action}", self.user_recipe_titles)
     end
+    
+    # Deletes User from Table
+    def delete_account
+        choice = CLI.prompts.select("Are you sure you want to delete your Account", ["Yes", "No"])
+        case choice 
+        when /Yes/
+            User.destroy(self.id)
+        when /No/
+            puts "Acccount not Deleted."
+        end
+    end
+        
 end

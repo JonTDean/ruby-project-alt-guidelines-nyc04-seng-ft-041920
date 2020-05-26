@@ -14,15 +14,18 @@ class CLIUserController
         SignIn.log_in?(name)                        # Begins Sign In / Sign Up process
     end
 
+    # Passes Current User Object
     def self.current_user?
-        @@current_user                              # Passes Current User Object
+        @@current_user                              
     end
     
+    # Passes Current User ID
     def self.my_id?
-        @@current_user.id                           # Passes Current User ID
+        @@current_user.id                           
     end
 
-    def self.my_name?                               # Passes Current User Name
+    # Passes Current User Name
+    def self.my_name?                               
         @@current_user.name
     end
     
@@ -31,6 +34,11 @@ class CLIUserController
         @@current_user = logged_in_user              # Sets State to Logged In
         ## USERPORTAL GOES HERE
         DeanbugMenu.who_is?(@@current_user)          # Displays User Screen ## DEBUG 
+    end
+
+    #Deletes Account
+    def self.delete_account
+        @@current_user.delete_account
     end
     
 end
