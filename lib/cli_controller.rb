@@ -10,10 +10,8 @@ class CLIController
     # Goal is to have this be the main access point to the other menus.
     # Allows for scalability with additional menus/features
     # the screens can also be organized and called in a modular design
-    attr_reader :cli
     
     def initialize
-        @cli = CLI.new
         CLIController.start_user_auth_process
     end
 

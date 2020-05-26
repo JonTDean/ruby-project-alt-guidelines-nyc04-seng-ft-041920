@@ -10,7 +10,7 @@ class UserPassword
         is_valid =  "You have entered an illegal character! Please put a number or a letter (Case-Sensitive!), No Spaces!"
 
         # Asks user for password
-        new_user_password = @cli.prompt.ask("What do you want your password to be? Numbers and Letters only (Case-Sensitive!).") do |q|
+        new_user_password = CLI.prompts.ask("What do you want your password to be? Numbers and Letters only (Case-Sensitive!).") do |q|
             q.required true                                                 # Requires Special Properties defined at <q>
             q.validate /^[0-9a-zA-Z]*$/                                     # Performs comparison check, if true validate is true if false validate is false
             q.messages[:valid?] = is_valid                                  # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
@@ -29,8 +29,7 @@ class UserPassword
     end
 
     private
-    @cli = CLI.new
-    
+
     # Checks for correct password
     def self.secure_password(password)
         BCrypt::Password.create(password)                                  # Creates a Hash of the stored password 

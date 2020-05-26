@@ -9,9 +9,8 @@ class CLIUserController
     @@current_user = nil                            # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
 
     # Starts new CLIUser State Management Instance
-    def initialize    
-        @cli = CLI.new
-        name =  @cli.prompt.ask("Hi! Please tell me your name!")
+    def initialize
+        name =  CLI.prompts.ask("Hi! Please tell me your name!")
         SignIn.log_in?(name)                        # Begins Sign In / Sign Up process
     end
 
