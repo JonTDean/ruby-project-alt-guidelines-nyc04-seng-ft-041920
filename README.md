@@ -57,3 +57,7 @@ Jon:
 
     * Units:
         1. has many \<orders> relationship
+
+
+NEW :::
+- Fixed Vendor List, and other gem stuff.
