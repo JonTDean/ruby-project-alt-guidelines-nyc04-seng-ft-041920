@@ -36,10 +36,19 @@ class CLIUserController
         DeanbugMenu.who_is?(@@current_user)          # Displays User Screen ## DEBUG 
     end
 
-    #Deletes Account
+    # Deletes Account
     def self.delete_account
         @@current_user.delete_account
     end
+
+    # Update Account 
+    # def update_account_menu
+    
+    # end
+
+    # def update_account_start(property)
+    #     @@current_user.update()
+    # end
     
 end
 

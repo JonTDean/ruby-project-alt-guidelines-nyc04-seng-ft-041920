@@ -5,8 +5,8 @@ class IngredientController
     @name = Ingredient.all.map(&:name) # Returns all of the Ingredient names from Ingredient table
 
     def self.choose_an_ingredient      # Returns Ingredient Object
-        CLI.prompts.select("Please choose an Ingredient", @name)                        # Asks user to choose an ingredient
-
+        choice = CLI.prompts.select("Please choose an Ingredient", @name)                        # Asks user to choose an ingredient
+        Ingredient.find_by(name: choice)
     end
 
     def self.view_ingredients
