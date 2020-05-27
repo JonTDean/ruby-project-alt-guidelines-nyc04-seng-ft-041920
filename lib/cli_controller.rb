@@ -24,7 +24,4 @@ class CLIController
     def self.start_debug_menu
         Deanbug.boot
     end
-
-    # # User Portal Area
-
 end
