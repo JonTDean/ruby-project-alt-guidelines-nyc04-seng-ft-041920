@@ -34,7 +34,7 @@ class CLI
 
     ## Exits Program
     def self.close
-        self.loading_bar("Loading Log In Menu...")
+        self.loading_bar("Exiting Program...")
         abort("Exiting program... Goodbye!")
     end
 

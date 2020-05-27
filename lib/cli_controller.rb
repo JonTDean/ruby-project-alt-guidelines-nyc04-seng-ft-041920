@@ -11,6 +11,7 @@ class CLIController
     # Allows for scalability with additional menus/features
     # the screens can also be organized and called in a modular design
     
+    
     def initialize
         # CLIController.start_user_auth_process
         CLIController.welcome_screen
@@ -61,11 +62,7 @@ class CLIController
             case choice
 
                 when "Recipes"
-                    if CLIUserController.current_user?.recipes.length > 0               # Checks if the user has any recipes in their <recipes> table
-                        CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
-                    else
-                        CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                    end
+                    CLIController.recipe_length_check
 
                 when "Profile"
                     CLIController.profile_select_menu                                   # Goes to the Profile Options Menu
@@ -82,36 +79,19 @@ class CLIController
         case choice
             when "View my Recipes"
                 RecipeController.show_user_recipes("view")
-                if CLIUserController.current_user?.recipes.length > 0               # Checks if the user has any recipes in their <recipes> table
-                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
-                else
-                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                end
+
 
             when "Edit a Recipe"
                 RecipeController.show_user_recipes("update")
-                if CLIUserController.current_user?.recipes.length > 0               # Checks if the user has any recipes in their <recipes> table
-                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
-                else
-                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                end
+                CLIController.recipe_length_check
 
             when "Create a Recipe"
                 RecipeController.ask_for_recipe_details
-                if CLIUserController.current_user?.recipes.length > 0                # Checks if the user has any recipes in their <recipes> table
-                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
-                else
-                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                end
+                CLIController.recipe_length_check
 
             when "Delete a Recipe"
-               check = RecipeController.show_user_recipes("delete")
-                
-               if CLIUserController.current_user?.recipes.length > 0                # Checks if the user has any recipes in their <recipes> table
-                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
-                else
-                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                end
+               RecipeController.show_user_recipes("delete")
+               CLIController.recipe_length_check
 
             when "Go back to Main Menu"
                 CLIController.user_portal
@@ -126,16 +106,20 @@ class CLIController
             case choice
                 when "Create a Recipe"
                     RecipeController.ask_for_recipe_details
-                    CLIUserController.get_user_updated_data?                             # Updates Recipe Data
-                    if CLIUserController.current_user?.recipes.length > 0                # Checks if the user has any recipes in their <recipes> table
-                        CLIController.full_recipe_select_menu                            # Selects Full Recipe Menu
-                    else
-                        CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
-                    end
+                    CLIController.recipe_length_check
 
                 when "Go back to Main Menu"
                     CLIController.user_portal 
             end
+    end
+
+    # Checks <Table :: Recipe>
+    def self.recipe_length_check
+        if CLIUserController.current_user?.user_recipes.length > 0                              # Checks if the user has any recipes in their <recipes> table
+            CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
+        else
+            CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
+        end
     end
     
     # Opens up a selection prompt in order to Traverse User Settings
@@ -147,6 +131,7 @@ class CLIController
                 
             when "Delete my Account"
                 CLIUserController.delete_account
+
             when "Go back to Main Menu"
                 CLIController.user_portal
         end
