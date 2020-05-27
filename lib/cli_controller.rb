@@ -58,10 +58,16 @@ class CLIController
     def self.user_portal
         choice = CLI.prompts.select("Where would you like to go?", ["Recipes", "Profile",  "Log Out"])
             case choice
-                when "Recipes"
-                    CLIController.recipe_select_menu
 
-                when "Profile"
+                when "recipes"
+                    if CLIUserController.current_user?.recipes.length > 0
+                        CLIController.full_recipe_select_menu
+                    else
+                        CLIController.recipe_create_menu
+                    end
+
+                when "profile"
+                    # CLIUserController.update_account_menu
                     CLIController.profile_select_menu
 
                 when "Log Out"
@@ -70,20 +76,35 @@ class CLIController
     end
 
     # Opens up a selection prompt in order to select recipes.
-    def self.recipe_select_menu
-        choice = CLI.prompts.select("What would you like to do?", ["View my Recipes", "Edit a Recipe", "Create a Recipe", "Delete a Recipe", "Main Menu"])
+
+    def self.full_recipe_select_menu
+        choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "delete a recipe"])
+
         case choice
             when "View my Recipes"
                 RecipeController.show_user_recipes("view")
+
             when "Edit a Recipe"
                 RecipeController.show_user_recipes("update")
-            when "Create a Recipe"
-                RecipeController.show_user_recipes("create")
-            when "Delete a Recipe"
+
+            when "create a recipe"
+                RecipeController.ask_for_recipe_details
+
+            when "delete a recipe"
                 RecipeController.show_user_recipes("delete")
+
             when "Main Menu"
                 CLIController.user_portal
         end
+    end
+
+    def self.recipe_create_menu
+        choice = CLI.prompts.select("What would you like to do?", ["create a recipe"])
+
+            case choice
+                when "create a recipe"
+                    RecipeController.ask_for_recipe_details
+            end
     end
     
     # Opens up a selection prompt in order to Traverse User Settings

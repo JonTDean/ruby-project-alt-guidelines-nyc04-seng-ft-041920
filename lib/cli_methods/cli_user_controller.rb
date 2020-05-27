@@ -11,6 +11,8 @@ class CLIUserController
         @@current_user                              
     end
 
+    # Update Current User
+
     # For logging out
     def self.log_out?
         choice = CLI.prompts.select("Are you sure you want to log out?", ["Yes", "No"])
@@ -27,12 +29,12 @@ class CLIUserController
     
     # Passes Current User ID
     def self.my_id?
-        @@current_user.id                           
+        @@current_user.id         # Displays ID of current User Object               
     end
 
     # Passes Current User Name
     def self.my_name?                               
-        @@current_user.name
+        @@current_user.name       # Displays Name of current User Object
     end
     
     # logs user into account
