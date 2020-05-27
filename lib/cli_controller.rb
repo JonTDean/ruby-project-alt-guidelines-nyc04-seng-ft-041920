@@ -25,4 +25,6 @@ class CLIController
         Deanbug.boot
     end
 
+    # # User Portal Area
+
 end
