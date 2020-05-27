@@ -28,10 +28,10 @@ class Recipe < ActiveRecord::Base
         recipe_array.push(self.directions)
     end
 
-    def pretty_view_recipe
+    def pretty_view
         puts "Recipe Name: #{self.title}"        
-        puts "Created By: #{self.user.name}\n"
-        puts "Ingredients:\n------------"
+        puts "Created By: #{self.user.name}"
+        puts "\nIngredients:\n------------"
         puts  self.pretty_orders.join("\n")
 
         puts "\nDirections:"
