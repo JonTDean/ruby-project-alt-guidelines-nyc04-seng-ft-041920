@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
     end
 
     def user_recipes
-        CLI.prompts.select("Please select one of your recipes to #{action}", self.recipes)
+        self.recipes.length
     end
 
     # Deletes User from Table

@@ -50,8 +50,10 @@ class CLIController
             
         when "Options"
             Deanbug.boot
+
         when "Exit"
             CLI.close
+            
         end
     end
 
@@ -74,12 +76,16 @@ class CLIController
 
     # Opens up a selection prompt in order to select recipes.
     def self.full_recipe_select_menu
-        choice = CLI.prompts.select("What would you like to do?", ["View my Recipes", "Edit a Recipe", "Create a Recipe", "Delete a Recipe", "Go back to Main Menu"])
+        choice = CLI.prompts.select("What would you like to do?", ["View my Recipes", "View All Recipes", "Edit a Recipe", "Create a Recipe", "Delete a Recipe", "Go back to Main Menu"])
 
         case choice
             when "View my Recipes"
                 RecipeController.show_user_recipes("view")
+                CLIController.recipe_length_check
 
+            when "View All Recipes"
+                RecipeController.show_all_recipes
+                CLIController.recipe_length_check
 
             when "Edit a Recipe"
                 RecipeController.show_user_recipes("update")
@@ -115,7 +121,8 @@ class CLIController
 
     # Checks <Table :: Recipe>
     def self.recipe_length_check
-        if CLIUserController.current_user?.user_recipes.length > 0                              # Checks if the user has any recipes in their <recipes> table
+        
+        if CLIUserController.current_user?.user_recipes > 0                 # Checks if the user has any recipes in their <recipes> table
             CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
         else
             CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty

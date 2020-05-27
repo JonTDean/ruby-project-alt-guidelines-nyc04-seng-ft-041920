@@ -43,8 +43,8 @@ class CLIUserController
     # logs user into account
     def self.log_in_to_account(logged_in_user)  
         @@current_user = logged_in_user              # Sets State to Logged In
-        DeanbugMenu.who_is?(@@current_user)          # Displays User Screen ## DEBUG 
-        CLIController.user_portal
+        CLI.back_to_log_in_menu
+        # DeanbugMenu.who_is?(@@current_user)        # Displays User Screen ## DEBUG 
     end
 
     # Deletes Account
@@ -79,7 +79,7 @@ class CLIUserController
         @@current_user.update(property => change)
 
         CLIController.profile_select_menu
-    end
+    end 
     
 end
 
