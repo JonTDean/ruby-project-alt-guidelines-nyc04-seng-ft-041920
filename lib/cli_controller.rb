@@ -68,7 +68,6 @@ class CLIController
                     end
 
                 when "Profile"
-                    # CLIUserController.update_account_menu
                     CLIController.profile_select_menu                                   # Goes to the Profile Options Menu
 
                 when "Log Out"
@@ -83,11 +82,19 @@ class CLIController
         case choice
             when "View my Recipes"
                 RecipeController.show_user_recipes("view")
-                CLIController.full_recipe_select_menu
+                if CLIUserController.current_user?.recipes.length > 0               # Checks if the user has any recipes in their <recipes> table
+                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
+                else
+                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
+                end
 
             when "Edit a Recipe"
                 RecipeController.show_user_recipes("update")
-                CLIController.full_recipe_select_menu
+                if CLIUserController.current_user?.recipes.length > 0               # Checks if the user has any recipes in their <recipes> table
+                    CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
+                else
+                    CLIController.recipe_create_menu                                # Heads to Recipe Create menu if <recipes> table is empty
+                end
 
             when "Create a Recipe"
                 RecipeController.ask_for_recipe_details

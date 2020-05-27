@@ -68,6 +68,7 @@ class CLIUserController
                 q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase) and numbers"   # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
             end
         when :name
+            CLI.prompts.say("Current Name is: #{CLIUserController.my_name?}")
             change = CLI.prompts.ask("What do you want to change #{property} to?") do |q|        # Prompts for User Name
                 q.required true                                                                  # Requires Special Properties defined at <q>
                 q.validate /^[a-zA-Z]*$/                                                         # Performs comparison check, if true validate is true if false validate is false
