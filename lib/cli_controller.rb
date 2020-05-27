@@ -56,7 +56,11 @@ class CLIController
 
             case choice
                 when "recipes"
-                    CLIController.recipe_select_menu
+                    if CLIUserController.current_user?.recipes.length > 0
+                        CLIController.full_recipe_select_menu
+                    else
+                        CLIController.recipe_create_menu
+                    end
                 when "profile"
                     # CLIUserController.update_account_menu
                     CLIController.profile_select_menu
@@ -64,7 +68,7 @@ class CLIController
             
     end
 
-    def self.recipe_select_menu
+    def self.full_recipe_select_menu
         choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "delete a recipe"])
 
         case choice
@@ -73,10 +77,19 @@ class CLIController
             when "edit a recipe"
                 RecipeController.show_user_recipes("update")
             when "create a recipe"
-                RecipeController.show_user_recipes("create")
+                RecipeController.ask_for_recipe_details
             when "delete a recipe"
                 RecipeController.show_user_recipes("delete")
         end
+    end
+
+    def self.recipe_create_menu
+        choice = CLI.prompts.select("What would you like to do?", ["create a recipe"])
+
+            case choice
+                when "create a recipe"
+                    RecipeController.ask_for_recipe_details
+            end
     end
     
     def self.profile_select_menu

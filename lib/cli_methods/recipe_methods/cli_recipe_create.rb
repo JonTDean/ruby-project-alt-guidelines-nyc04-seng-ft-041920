@@ -41,12 +41,16 @@ class RecipeController
     #action could be delete, update, view 
     def self.show_user_recipes(action)
         current_user = CLIUserController.current_user?
-        title = CLI.prompts.select("Which recipe would you like to #{action}?", current_user.user_recipe_titles)
+        # title = CLI.prompts.select("Which recipe would you like to #{action}?", current_user.user_recipe_titles)
+        title = current_user.select_user_recipe_by_title(action)
 
         recipe = Recipe.find_by(title: title)
         case action
         when "delete"
             recipe.remove_recipe
+            CLI.prompts.say("Recipe has been deleted.")
+            # current_user.user_recipe_titles
+
         
         when "view"
             #view recipe
@@ -59,9 +63,8 @@ class RecipeController
             index = recipe.view_recipe.index(item)
             puts index
             item_part = CLI.prompts.select("Which part would you like to #{action}?", item.split(" ", 3)) #accounts for ingredients that are more than one word
-            #actually update it
-            # if it is the amount
 
+            # if it is the amount
             if item_part == item.split(" ", 3)[0]
                 #amount
                 new_amount = CLI.prompts.ask('What would you like to change it to?', required: true)
