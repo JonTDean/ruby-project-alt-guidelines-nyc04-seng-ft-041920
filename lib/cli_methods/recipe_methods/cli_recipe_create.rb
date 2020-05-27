@@ -32,6 +32,9 @@ class RecipeController
         amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
         Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
         end
+        directions = CLI.prompts.ask("Please add recipe instructions:", required: true)
+        recipe.update_directions(directions)
+
         #and push to tables with correct ids
 
         CLI.prompts.ok("You finished creating the recipe")
@@ -41,13 +44,16 @@ class RecipeController
     #action could be delete, update, view 
     def self.show_user_recipes(action)
         current_user = CLIUserController.current_user?
-        title = CLI.prompts.select("Which recipe would you like to #{action}?", current_user.user_recipe_titles)
+        # title = CLI.prompts.select("Which recipe would you like to #{action}?", current_user.user_recipe_titles)
+        title = current_user.select_user_recipe_by_title(action)
 
         recipe = Recipe.find_by(title: title)
         case action
         when "delete"
             recipe.remove_recipe
-        
+            CLI.prompts.say("Recipe has been deleted.")
+            # current_user.user_recipe_titles
+
         when "view"
             #view recipe
             CLI.prompts.say(recipe.view_recipe.join("\n"))
@@ -56,45 +62,51 @@ class RecipeController
 
             #update recipe
             item = CLI.prompts.select("Which item would you like to #{action}?", recipe.view_recipe)
+
+
+
             index = recipe.view_recipe.index(item)
-            puts index
-            item_part = CLI.prompts.select("Which part would you like to #{action}?", item.split(" ", 3)) #accounts for ingredients that are more than one word
-            #actually update it
-            # if it is the amount
+            # if they are updating the instructions
+            if index = recipe.view_recipe.length - 1
+                new_directions = CLI.prompts.ask('What would you like to change it to?', required: true)
 
-            if item_part == item.split(" ", 3)[0]
-                #amount
-                new_amount = CLI.prompts.ask('What would you like to change it to?', required: true)
-                # update the amount in the corresponding order
-                recipe.orders[index].update(amount: new_amount)
+                recipe.update(directions: new_directions)
 
-                #############add something to make sure they don't leave it blank
-            elsif item_part == item.split(" ", 3)[1]
-                #unit
-                #make this a color so easier to see??
-                CLI.prompts.ok("You are currently updating #{item}")
-                new_unit = UnitController.choose_a_unit
-                recipe.orders[index].update(unit_id: new_unit.id)
+                # if they are updating one of the recipeIngredients
+                else
+                item_part = CLI.prompts.select("Which part would you like to #{action}?", item.split(" ", 3)) #accounts for ingredients that are more than one word
 
-                # display somehow to show it was changed
-                puts "Your edit was successful!"
-                puts "#{recipe.orders[index].amount} #{Unit.find(recipe.orders[index].unit_id).name} #{Ingredient.find(recipe.orders[index].ingredient_id).name}"
-            else
-                #ingredient
-                puts "You are currently updating #{item}"
-                new_ingredient = IngredientController.choose_an_ingredient
-                recipe.orders[index].update(ingredient_id: new_ingredient.id)
+                # if it is the amount
+                if item_part == item.split(" ", 3)[0]
+                    #amount
+                    new_amount = CLI.prompts.ask('What would you like to change it to?', required: true)
+                    # update the amount in the corresponding order
+                    recipe.orders[index].update(amount: new_amount)
+
+                    #############add something to make sure they don't leave it blank
+                elsif item_part == item.split(" ", 3)[1]
+                    #unit
+                    #make this a color so easier to see??
+                    CLI.prompts.ok("You are currently updating #{item}")
+                    new_unit = UnitController.choose_a_unit
+                    recipe.orders[index].update(unit_id: new_unit.id)
+
+                    # display somehow to show it was changed
+                    puts "Your edit was successful!"
+                    puts "#{recipe.orders[index].amount} #{Unit.find(recipe.orders[index].unit_id).name} #{Ingredient.find(recipe.orders[index].ingredient_id).name}"
+                else
+                    #ingredient
+                    puts "You are currently updating #{item}"
+                    new_ingredient = IngredientController.choose_an_ingredient
+                    recipe.orders[index].update(ingredient_id: new_ingredient.id)
+                end
             end
 
-            
+
         else
             #shouldn't get here
             puts "reached else in case statement"
         end
-
-        CLIController.user_portal
-
-        
 
     end
 
