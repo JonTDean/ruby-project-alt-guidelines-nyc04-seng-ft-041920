@@ -11,7 +11,10 @@ class CLIUserController
         @@current_user                              
     end
 
-    # Update Current User
+    # Update Current User ##################################
+    def self.get_user_updated_data?
+        @@current_user = User.find_by(name: @@current_user.name)
+    end
 
     # For logging out
     def self.log_out?
