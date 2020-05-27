@@ -9,14 +9,33 @@ class Recipe < ActiveRecord::Base
         self.destroy
     end
 
+    def user
+        User.find(self.user_id)
+    end
+
     def update_directions(directions)
         self.update(directions: directions)
     end
 
-    def view_recipe
-        recipe_array = self.orders.map do |order| 
+    def pretty_orders
+        self.orders.map do |order| 
             "#{order.amount} #{Unit.find(order.unit_id).name} #{Ingredient.find(order.ingredient_id).name}"
         end
+    end
+
+    def view_recipe
+        recipe_array = self.pretty_orders
         recipe_array.push(self.directions)
+    end
+
+    def pretty_view_recipe
+        puts "Recipe Name: #{self.title}"        
+        puts "Created By: #{self.user.name}\n"
+        puts "Ingredients:\n------------"
+        puts  self.pretty_orders.join("\n")
+
+        puts "\nDirections:"
+        puts "-----------\n#{self.directions}"
+
     end
 end
