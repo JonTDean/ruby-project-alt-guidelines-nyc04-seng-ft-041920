@@ -1,8 +1,6 @@
 class Deanbug
 
-    attr_accessor :menu_choices                           # Handles list of allowable choices
-    private :menu_choices, :menu_choices=
-
+    # Boots to Deanbug Menus
     def self.boot
         self.main_menu                                    # Welcome menu, displays available choices
         self.menu_interaction                             # Displays interactables, and allows choice input
@@ -11,74 +9,18 @@ class Deanbug
     private 
     # Displays Menu Logic
     def self.main_menu
-        @main_menu_choices = ["l"]
-        # Container for debug menu
-        debug_menu_display = ["Welcome to the Debug Menu.", "Please, Input a command"] 
-        debug_menu_display.each{|e| puts e}               # Display menu
-
-        # Choices for Debug Settings
-        command_display = ["l - Displays Debug Log Menu"]                              
-        command_display.each{|e| puts " - #{e}"}          # Displays Choices
+        CLI.prompts.expand("What Menu Would you like to go to?", DeanbugData.main_menu_choices)
     end
 
-    # Performs Menu Logic
-    def self.menu_interaction
-        puts "What Menu Would you like to go to?"
-
-        input = STDIN.getch.downcase                      # Grabs user input
-        puts "Got Input"
-        if self.menu_check(input)                         # If user Input is correct
-            self.log_menu                                 # Calls menu_check with input
-        elsif !self.menu_check(input)                     # If user Input is not correct
-            self.invalid_menu_response(input)             # Invalid response check until correct
-        end
-    end
-
-    def self.menu_check(input)
-        # Checks if the input is correct
-        case input                  
-        when @main_menu_choices[0]                        # checks input == "l"
-            true
-        else
-            false                                         # Returns false if no menu choices are correct
-        end
-    end
-
-    # Forces a correct response from user.
-    def self.invalid_menu_response(input)
-        while !@main_menu_choices.include?(input)         # Runs comparison check against input
-            puts "Please give a valid response."          
-            @main_menu_choices.each {|e| puts " - #{e}"}  # Displays Menu Choices available
-            input = STDIN.getch.downcase
-        end
-        self.log_menu
-    end
-
-    # Hide Database output from log, still capturable https://stackoverflow.com/questions/7724188/how-can-you-hide-database-output-in-rails-console
     def self.log_menu
-        puts "If you want to start debug log please type: yes[y] or no[n], to go back to the previous menu type: back[b], if you want to exit type: Quit[q] "
-        input = STDIN.getch.downcase
-        case input 
-        when /yes|y/                                      # If debug mode is on then display logs
-            ActiveRecord::Base.logger.level = 0           # Debug mode On
-            puts "Heading to Debug Log Menu..."
-            self.log_menu                                 # Heads to Debug Log Menu
-        when /no|n/                                       # If debug mode is not on then don't display logs
-            ActiveRecord::Base.logger.level = 1           # Debug mode Off
-            puts "Heading back to Log Main Menu..."       
-            self.log_menu                                 # Heads to Debug Log Menu
-        when /quit|q/                                     # Exits out of program
-            abort("Exiting Program... Goodbye!")          
-        when /back|b/                                     # Heads to Debug Main Menu
-            puts "Heading to Debug Main Menu..."            
-            self.main_menu  
-        when /menu|m/                                     # Heads to Start Menu
-            puts "Heading to Main Menu"
-            CLIUser.start
-        when !(/yes|y|no|n|quit|q|back|b|menu|m/)         # Recursive toggle response
-            "Please enter a valid response"
-            self.log_menu
-        end
+        CLI.prompts.say("Welcome to the Debug Menu.")
+        
+        # Begins Log Menu Prompt
+        # input = CLI.prompts.expand( 
+        #     "To - Start DebugLog  y, Stop DebugLog  On, Go to Debug Main Menu Off,  Quit program : Quit, Start Screen  Leave", 
+        #     DeanbugData.log_menu_choices 
+        # ) 
+        # DeanbugData.log_menu_logic(input)
     end
 
 end    
@@ -133,4 +75,50 @@ class DeanbugQuick
         puts true;"SUCCESS"     # Only the output of the last command that was executed will be displayed to the screen
     end
 
+end
+
+class DeanbugData
+    attr_accessor :log_menu_choices
+    @@log_menu_choices = ["On", "Off", "Back", "Quit","Leave"]
+
+    # Handles list of allowable Debug Menu choices
+    def self.main_menu_choices
+        [ 
+            {key: "l", name: "Debug Log Menu", value: Deanbug.log_menu}
+        ]
+    end
+
+    def self.log_menu_choices
+        @@log_menu_choices
+    end
+    
+    # Handles list of Debug-Log Menu choices
+    def self.log_menu_logic(choice)
+        # # Make a choice Hash?
+        # choice_hash = {
+        #     On: ActiveRecord::Base.logger.level = 0
+        # }
+        # Do choice.to_sym
+        case choice
+        when /On/
+            CLI.prompts.say("DEANBUG-LOG: ON")
+            ActiveRecord::Base.logger.level = 0
+            puts "Heading back to Log Main Menu..."       
+            self.log_menu 
+        when /Off/
+            CLI.prompts.say("DEANBUG-LOG: OFF")
+            ActiveRecord::Base.logger.level = 1
+            puts "Heading back to Log Main Menu..."       
+            self.log_menu                                
+        when /Back/
+            CLI.prompts.say("Heading to Debug Main Menu")
+            Deanbug.boot
+        when /Quit/
+            CLI.prompts.say("Exiting Program... Goodbye!")
+            CLI.close
+        when /Leave/
+            CLI.prompts.say("Heading to Start Menu")
+            CLIUser.start
+        end
+    end
 end

@@ -92,6 +92,10 @@ class RecipeController
             puts "reached else in case statement"
         end
 
+        CLIController.user_portal
+
+        
+
     end
 
     

@@ -6,10 +6,6 @@ Quick Notes:
 
 * I converted User Auth to use the 'TTY' Gem for the prompts, reduced over 100+ lines of code.
 
-#### Quick TODO
-
-Clear the Database, this way we can work with a new DataSet.
-
 ### 1A: Login System
 
 * Login to Account (Account Directly connected to Existing User Tables)
@@ -40,15 +36,12 @@ Clear the Database, this way we can work with a new DataSet.
 
 * FALSE: Pushes to UserAccountCreation.ask_user_create?
 
+* Delete User: Added a Delete User Function in order to delete and modify table data.
+
 #### TODO
 
-1. Log Out feature:
- As of now the the only way to "log out" is to cmd(ctrl) + z
+1. Downcase the incoming input of the user for new account creations
 
-2. Delete User:
- No way at all to Delete User
-
-3. Downcase the incoming input of the user for new account creations
 --------------------------------------------
 
 ## 2: Debug System - Deanbug

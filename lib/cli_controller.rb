@@ -12,7 +12,9 @@ class CLIController
     # the screens can also be organized and called in a modular design
     
     def initialize
-        CLIController.start_user_auth_process
+        # CLIController.start_user_auth_process
+        CLIController.welcome_screen
+
     end
 
     # Log In Menu / User Account Create Menu
@@ -24,5 +26,79 @@ class CLIController
     def self.start_debug_menu
         Deanbug.boot
     end
+
+    # Welcome screen
+    def self.welcome_screen
+        puts "Welcome to our awesome project: name TBD"
+        #ascii art
+        
+        #wait times
+        self.start_screen
+    end
+
+    def self.start_screen
+        choice = CLI.prompts.select("What would you like to do?", %w(Sign\ Up Log\ In Options))
+        
+        case choice
+        when "Sign Up"
+            UserAccountCreation.ask_user_create?
+        when "Log In"
+            SignIn.log_in?
+            
+        when "Options"
+            Deanbug.boot
+        end
+    end
+
+    def self.user_portal
+
+        choice = CLI.prompts.select("Where would you like to go?", ["recipes", "profile"])
+
+            case choice
+                when "recipes"
+                    CLIController.recipe_select_menu
+                when "profile"
+                    # CLIUserController.update_account_menu
+                    CLIController.profile_select_menu
+            end
+            
+    end
+
+    def self.recipe_select_menu
+        choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "delete a recipe"])
+
+        case choice
+            when "view my recipes"
+                RecipeController.show_user_recipes("view")
+            when "edit a recipe"
+                RecipeController.show_user_recipes("update")
+            when "create a recipe"
+                RecipeController.show_user_recipes("create")
+            when "delete a recipe"
+                RecipeController.show_user_recipes("delete")
+        end
+    end
+    
+    def self.profile_select_menu
+        choice = CLI.prompts.select("What would you like to do?", ["update my profile", "delete account"])
+        case choice    
+            # when "view my profile"
+            #     CLIUserController.my_name?
+
+            when "update my profile"
+                # puts  "UPDATING THE PROFILE"
+                CLIUserController.update_account_menu
+                
+            when "delete account"
+                CLIUserController.delete_account
+        end
+    end
+
+
+
+    # def interact_with_recipes
+
+    # end
+
 
 end

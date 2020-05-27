@@ -5,7 +5,8 @@ class SignIn
     attr_reader :is_user, :cli, :is_valid
     private :is_user, :is_valid
 
-    def self.log_in?(username)      
+    def self.log_in?    
+        username = CLI.prompts.ask("What is your username?")  
         # If name is in database then prompt for password else prompt for create an account
         if User.exists?(name: username)                     # Checks to see if the User Exists 
             @current_user = User.find_by(name: username)    # Grabs user object
