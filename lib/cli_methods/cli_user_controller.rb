@@ -8,11 +8,7 @@ class CLIUserController
     private :cli=                                   # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
     @@current_user = nil                            
 
-    # Starts new CLIUser State Management Instance
-    def initialize
-        name =  CLI.prompts.ask("Hi! Please tell me your name!")
-        SignIn.log_in?(name)                        # Begins Sign In / Sign Up process
-    end
+  
 
     # Passes Current User Object
     def self.current_user?
@@ -34,6 +30,7 @@ class CLIUserController
         @@current_user = logged_in_user              # Sets State to Logged In
         ## USERPORTAL GOES HERE
         DeanbugMenu.who_is?(@@current_user)          # Displays User Screen ## DEBUG 
+        CLIController.user_portal
     end
 
     # Deletes Account
