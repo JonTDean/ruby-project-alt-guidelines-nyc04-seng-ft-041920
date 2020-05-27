@@ -23,7 +23,7 @@ class UserAccountCreation
         when /Yes/                                          # if "Yes" goes to account creation
             self.account_creation 
         when /No/                                           # Else if "No" Will take you back to the Main Menu."
-            CLI.back_to_log_in_menu
+            CLIController.start_screen
         when /Quit/
             CLI.close
         end
@@ -59,9 +59,9 @@ class UserAccountCreation
     
     # Saves Account to table then goes to login menu
     def self.account_to_table(user_name, password)
-        puts "Account Created! Going back to main menu."
-        User.create(name: user_name, password: password)        # Saves User to user.db
-        CLI.back_to_log_in_menu                                 # Goes back to main menu
+        puts "Account Created! Going to Main Menu..."
+        new_user = User.create(name: user_name, password: password)         # Saves User to user.db
+        CLIUserController.log_in_to_account(new_user)                 # Goes back to User Portal                                 
     end
     
 end

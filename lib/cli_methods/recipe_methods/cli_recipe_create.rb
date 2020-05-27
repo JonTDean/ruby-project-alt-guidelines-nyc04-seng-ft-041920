@@ -54,7 +54,6 @@ class RecipeController
             CLI.prompts.say("Recipe has been deleted.")
             # current_user.user_recipe_titles
 
-        
         when "view"
             #view recipe
             CLI.prompts.say(recipe.view_recipe.join("\n"))
@@ -103,15 +102,11 @@ class RecipeController
                 end
             end
 
-            
+
         else
             #shouldn't get here
             puts "reached else in case statement"
         end
-
-        CLIController.user_portal
-
-        
 
     end
 
