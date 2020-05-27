@@ -1,7 +1,7 @@
 require 'faker'
 #USER
-User.create(name: Faker::Name.unique.name)
-User.create(name: Faker::Name.unique.name)
+User.create(name: Faker::Name.unique.name, password: "1234")
+User.create(name: Faker::Name.unique.name, password: "1234")
 
 #INGREDIENTS
 Ingredient.create(name: Faker::Food.unique.ingredient)
@@ -21,7 +21,7 @@ split = Faker::Food.measurement.split(" ")
 
 Unit.create(name: split[1])
 
-binding.pry
+# binding.pry
 
 #ORDERS
 Order.create(recipe_id: 1, ingredient_id: 2, unit_id: 1, amount: split[0].to_f)
