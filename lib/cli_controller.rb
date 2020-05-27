@@ -52,17 +52,20 @@ class CLIController
 
     def self.user_portal
 
-        def self.display_user_info
-            puts "Username is #{CLIUserController.my_name?}"
-            CLIUserController.update_account_menu
-            puts "Password"
-            CLI.prompts.ask("")
-            CLIController.user_portal
-        end
+        choice = CLI.prompts.select("Where would you like to go?", ["recipes", "profile"])
 
+            case choice
+                when "recipes"
+                    CLIController.recipe_select_menu
+                when "profile"
+                    # CLIUserController.update_account_menu
+                    CLIController.profile_select_menu
+            end
+            
+    end
 
-
-        choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "view my profile", "update my profile"])
+    def self.recipe_select_menu
+        choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "delete a recipe"])
 
         case choice
             when "view my recipes"
@@ -71,14 +74,26 @@ class CLIController
                 RecipeController.show_user_recipes("update")
             when "create a recipe"
                 RecipeController.show_user_recipes("create")
-            when "view my profile"
-                CLIController.display_user_info
-
-                # puts  "VEWING THE PROFILE"
-            when "update my profile"
-                puts  "UPDATING THE PROFILE"
-            end
+            when "delete a recipe"
+                RecipeController.show_user_recipes("delete")
+        end
     end
+    
+    def self.profile_select_menu
+        choice = CLI.prompts.select("What would you like to do?", ["update my profile", "delete account"])
+        case choice    
+            # when "view my profile"
+            #     CLIUserController.my_name?
+
+            when "update my profile"
+                # puts  "UPDATING THE PROFILE"
+                CLIUserController.update_account_menu
+                
+            when "delete account"
+                CLIUserController.delete_account
+        end
+    end
+
 
 
     # def interact_with_recipes

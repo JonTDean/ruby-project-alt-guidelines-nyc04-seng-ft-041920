@@ -16,8 +16,9 @@ class User < ActiveRecord::Base
         case choice 
         when /Yes/
             User.destroy(self.id)
+            puts "Your account wsa deleted. Goodbye!"
         when /No/
-            puts "Acccount not Deleted."
+            puts "Account not Deleted."
         end
     end
         
