@@ -4,15 +4,25 @@ require 'io/console'
 
 
 class CLIUserController 
-    attr_accessor :cli                              # Found technique to use private with symbols
-    private :cli=                                   # https://stackoverflow.com/questions/25571642/ruby-private-and-public-accessors
     @@current_user = nil                            
-
-  
 
     # Passes Current User Object
     def self.current_user?
         @@current_user                              
+    end
+
+    # For logging out
+    def self.log_out?
+        choice = CLI.prompts.select("Are you sure you want to log out?", ["Yes", "No"])
+        case choice
+        when "Yes"
+            CLI.prompts.say("Logging out...")
+            @@current_user = nil
+            CLIController.welcome_screen
+        when "No"
+            CLIController.user_portal
+        end
+
     end
     
     # Passes Current User ID
@@ -28,7 +38,6 @@ class CLIUserController
     # logs user into account
     def self.log_in_to_account(logged_in_user)  
         @@current_user = logged_in_user              # Sets State to Logged In
-        ## USERPORTAL GOES HERE
         DeanbugMenu.who_is?(@@current_user)          # Displays User Screen ## DEBUG 
         CLIController.user_portal
     end
@@ -62,6 +71,8 @@ class CLIUserController
         end
 
         @@current_user.update(property => change)
+
+        CLIController.profile_select_menu
     end
     
 end

@@ -36,68 +36,67 @@ class CLIController
         self.start_screen
     end
 
+    # User Start Screen
     def self.start_screen
-        choice = CLI.prompts.select("What would you like to do?", %w(Sign\ Up Log\ In Options))
+        choice = CLI.prompts.select("What would you like to do?", %w(Sign\ Up Log\ In Options Exit))
         
         case choice
         when "Sign Up"
             UserAccountCreation.ask_user_create?
+
         when "Log In"
             SignIn.log_in?
             
         when "Options"
             Deanbug.boot
+        when "Exit"
+            CLI.close
         end
     end
 
+    # Opens Main area where the user is able to interact with
     def self.user_portal
-
-        choice = CLI.prompts.select("Where would you like to go?", ["recipes", "profile"])
-
+        choice = CLI.prompts.select("Where would you like to go?", ["Recipes", "Profile",  "Log Out"])
             case choice
-                when "recipes"
+                when "Recipes"
                     CLIController.recipe_select_menu
-                when "profile"
-                    # CLIUserController.update_account_menu
+
+                when "Profile"
                     CLIController.profile_select_menu
+
+                when "Log Out"
+                    CLIUserController.log_out?
             end
-            
     end
 
+    # Opens up a selection prompt in order to select recipes.
     def self.recipe_select_menu
-        choice = CLI.prompts.select("What would you like to do?", ["view my recipes", "edit a recipe", "create a recipe", "delete a recipe"])
-
+        choice = CLI.prompts.select("What would you like to do?", ["View my Recipes", "Edit a Recipe", "Create a Recipe", "Delete a Recipe", "Main Menu"])
         case choice
-            when "view my recipes"
+            when "View my Recipes"
                 RecipeController.show_user_recipes("view")
-            when "edit a recipe"
+            when "Edit a Recipe"
                 RecipeController.show_user_recipes("update")
-            when "create a recipe"
+            when "Create a Recipe"
                 RecipeController.show_user_recipes("create")
-            when "delete a recipe"
+            when "Delete a Recipe"
                 RecipeController.show_user_recipes("delete")
+            when "Main Menu"
+                CLIController.user_portal
         end
     end
     
+    # Opens up a selection prompt in order to Traverse User Settings
     def self.profile_select_menu
-        choice = CLI.prompts.select("What would you like to do?", ["update my profile", "delete account"])
-        case choice    
-            # when "view my profile"
-            #     CLIUserController.my_name?
-
-            when "update my profile"
-                # puts  "UPDATING THE PROFILE"
+        choice = CLI.prompts.select("What would you like to do?", ["Update my Profile", "Delete my Account", "Main Menu"])
+        case choice
+            when "Update my Profile"
                 CLIUserController.update_account_menu
                 
-            when "delete account"
+            when "Delete my Account"
                 CLIUserController.delete_account
+            when "Main Menu"
+                CLIController.user_portal
         end
     end
-
-
-
-    # def interact_with_recipes
-
-    # end
-
 end

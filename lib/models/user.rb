@@ -16,9 +16,11 @@ class User < ActiveRecord::Base
         case choice 
         when /Yes/
             User.destroy(self.id)
-            puts "Your account wsa deleted. Goodbye!"
+            CLI.prompts.say("Your account was deleted. Heading to the Start Menu...")
+            CLIController.start_screen
         when /No/
-            puts "Account not Deleted."
+            CLI.prompts.say("Account was not deleted, heading to Main Menu!")
+            CLIController.profile_select_menu
         end
     end
         
