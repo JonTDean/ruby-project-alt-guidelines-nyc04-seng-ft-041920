@@ -27,7 +27,6 @@ class CLIUserController
         when "No"
             CLIController.user_portal
         end
-
     end
     
     # Passes Current User ID
@@ -43,7 +42,7 @@ class CLIUserController
     # logs user into account
     def self.log_in_to_account(logged_in_user)  
         @@current_user = logged_in_user              # Sets State to Logged In
-        CLI.back_to_log_in_menu
+        CLIController.user_portal
         # DeanbugMenu.who_is?(@@current_user)        # Displays User Screen ## DEBUG 
     end
 
