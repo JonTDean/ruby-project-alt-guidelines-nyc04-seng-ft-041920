@@ -105,6 +105,18 @@ class RecipeController
 
     end
 
+    def self.show_all_recipes
+        Recipe.all.each do |r|
+             user = User.find_by(id: r.user_id)
+             CLI.prompts.say("Recipe By: #{user.name}", color: :blue)
+             CLI.prompts.say("Recipe Name: #{r.title}", color: :blue)
+             CLI.prompts.say("Recipe Category: #{r.category}", color: :blue)
+             CLI.prompts.say("Recipe Directions: #{r.directions}", color: :blue)
+             puts ""
+             puts ""
+        end
+   end
+
     
 end
 

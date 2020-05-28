@@ -68,22 +68,10 @@ class DeanbugMenu # Collection of Custom Debug Menus
     end
 end
 
-class DeanbugQuick
-
-    def self.fail
-        puts false;"FAIL"       # Only the output of the last command that was executed will be displayed to the screen
-    end
-    
-    def self.success
-        puts true;"SUCCESS"     # Only the output of the last command that was executed will be displayed to the screen
-    end
-
-end
-
 class DeanbugData < ActiveRecord::Base
 
-    @@log_menu_choices = ["Debug Log On", "Debug Log Off", "Debug Main Menu", "Start Menu", "Exit Program"]
-    @@main_menu_choices = [ "Start Menu", "Debug Log Menu"]
+    @@log_menu_choices = ["Debug Log On", "Debug Log Off", "Debug Main Menu", "Back to Start Menu", "Exit Program"]
+    @@main_menu_choices = [ "Back to Start Menu", "Debug Log Menu"]
     @@debug_log_state = false;"off"
     @old_logger = ActiveRecord::Base.logger
 
@@ -99,7 +87,7 @@ class DeanbugData < ActiveRecord::Base
     # Handles list of allowable Debug Menu choices
     def self.main_menu_logic(choice)
         case choice
-        when "Start Menu"
+        when "Back to Start Menu"
             CLI.prompts.say("Going to Main Menu...")
             puts "Heading back to Log Main Menu..."       
             CLIController.start_screen
@@ -132,7 +120,7 @@ class DeanbugData < ActiveRecord::Base
         when "Debug Main Menu"
             CLI.prompts.say("Heading to Debug Main Menu", color: :yellow)
             Deanbug.boot
-        when "Start Menu"
+        when "Back to Start Menu"
             CLI.prompts.say("Heading to Start Menu", color: :yellow)
             CLIController.start_screen
         when "Exit Program"
