@@ -154,7 +154,15 @@ class RecipeController
             Recipe Category: #{r.category}\n\
             Recipe Directions: #{r.directions}\n\n\n"
        end
-        recipe_details = CLI.prompts.select("Which recipe would you like to view? (←/→ arrow keys to view more pages)", test, color: :blue, per_page: 4)
+       
+       CLI.prompts.on(:keypress, echo: false){|event|
+            if event.value == :keyright || event.value == :keyleft
+                system "clear"
+            end
+        }
+
+        recipe_details = CLI.prompts.select("Which recipe would you like to view? (←/→ arrow keys to view more pages)", test, color: :blue, per_page: 3)
+
         index = test.find_index(recipe_details)
         recipe = Recipe.all[index]
         
