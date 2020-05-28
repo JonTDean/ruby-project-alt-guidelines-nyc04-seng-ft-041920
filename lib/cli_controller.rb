@@ -121,7 +121,8 @@ class CLIController
 
     # Checks <Table :: Recipe>
     def self.recipe_length_check
-        
+        CLIUserController.current_user?.reload
+
         if CLIUserController.current_user?.user_recipes > 0                 # Checks if the user has any recipes in their <recipes> table
             CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
         else

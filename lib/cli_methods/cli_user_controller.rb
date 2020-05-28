@@ -70,9 +70,9 @@ class CLIUserController
             end
         end
 
-        @@current_user.update(property => change)
+        @@current_user.update(property => change)                                                # Modifies the current user's information
 
-        CLIController.profile_options_menu
+        CLIController.profile_options_menu                                                       # 
     end 
     
 end
