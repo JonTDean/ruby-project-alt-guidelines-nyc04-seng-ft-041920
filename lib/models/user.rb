@@ -19,12 +19,13 @@ class User < ActiveRecord::Base
         choice = CLI.prompts.select("Are you sure you want to delete your Account", ["Yes", "No"])
         case choice 
         when /Yes/
-            User.destroy(self.id)
-            CLI.prompts.say("Your account was deleted. Heading to the Start Menu...")
-            CLIController.start_screen
+            User.destroy(self.id)                       # Deletes the user from the table
+            Recipe.destroy_all(user_id: self.id)        # Deletes the Recipes associated with the current User
+            CLI.prompts.say("Your account, and all recipes associated with your account, have been deleted. Heading towards the Start Menu...")
+            CLIController.start_screen                  # Goes to Start Screen
         when /No/
             CLI.prompts.say("Account was not deleted, heading to Main Menu!")
-            CLIController.profile_select_menu
+            CLIController.profile_options_menu           # Goes back to Profile Select Menu
         end
     end
         

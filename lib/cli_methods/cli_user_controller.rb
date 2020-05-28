@@ -11,21 +11,16 @@ class CLIUserController
         @@current_user                              
     end
 
-    # Update Current User ##################################
-    def self.get_user_updated_data?
-        @@current_user = User.find_by(name: @@current_user.name)
-    end
-
     # For logging out
     def self.log_out?
         choice = CLI.prompts.select("Are you sure you want to log out?", ["Yes", "No"])
         case choice
         when "Yes"
             CLI.prompts.say("Logging out...")
-            @@current_user = nil
-            CLIController.welcome_screen
+            @@current_user = nil                    # Sets User "Logged In" state to off, current_user == nil
+            CLIController.welcome_screen            # Goes back to start menu
         when "No"
-            CLIController.user_portal
+            CLIController.user_portal               # Goes back to the User Portal Menu
         end
     end
     
@@ -75,9 +70,9 @@ class CLIUserController
             end
         end
 
-        @@current_user.update(property => change)
+        @@current_user.update(property => change)                                                # Modifies the current user's information
 
-        CLIController.profile_select_menu
+        CLIController.profile_options_menu                                                       # 
     end 
     
 end
