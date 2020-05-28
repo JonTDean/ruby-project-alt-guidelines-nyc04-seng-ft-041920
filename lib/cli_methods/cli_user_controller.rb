@@ -17,6 +17,8 @@ class CLIUserController
         case choice
         when "Yes"
             CLI.prompts.say("Logging out...")
+            sleep(0.7)
+            system "clear"
             @@current_user = nil                    # Sets User "Logged In" state to off, current_user == nil
             CLIController.welcome_screen            # Goes back to start menu
         when "No"
@@ -36,7 +38,11 @@ class CLIUserController
     
     # logs user into account
     def self.log_in_to_account(logged_in_user)  
-        @@current_user = logged_in_user              # Sets State to Logged In
+        @@current_user = logged_in_user 
+        sleep(0.5)
+        system "clear"
+        sleep(0.5)
+        CLI.prompts.say("Welcome #{CLIUserController.my_name?}")             # Sets State to Logged In
         CLIController.user_portal
         # DeanbugMenu.who_is?(@@current_user)        # Displays User Screen ## DEBUG 
     end
@@ -71,7 +77,8 @@ class CLIUserController
         end
 
         @@current_user.update(property => change)                                                # Modifies the current user's information
-
+        CLI.prompts.say("Account has been updated successfully.")
+        sleep(0.5)
         CLIController.profile_options_menu                                                       # 
     end 
     
