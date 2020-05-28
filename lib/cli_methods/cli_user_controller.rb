@@ -77,7 +77,7 @@ class CLIUserController
 
         @@current_user.update(property => change)
 
-        CLIController.profile_select_menu
+        CLIController.profile_options_menu
     end 
     
 end

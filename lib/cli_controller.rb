@@ -67,7 +67,7 @@ class CLIController
                     CLIController.recipe_length_check
 
                 when "Profile"
-                    CLIController.profile_select_menu                                   # Goes to the Profile Options Menu
+                    CLIController.profile_options_menu                                   # Goes to the Profile Options Menu
 
                 when "Log Out"
                     CLIUserController.log_out?                                          # Sets current_user to nil and Closes the program
@@ -130,7 +130,7 @@ class CLIController
     end
     
     # Opens up a selection prompt in order to Traverse User Settings
-    def self.profile_select_menu
+    def self.profile_options_menu
         choice = CLI.prompts.select("What would you like to do?", ["Update my Profile", "Delete my Account", "Go back to Main Menu"])
         case choice
             when "Update my Profile"
