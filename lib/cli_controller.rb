@@ -25,10 +25,13 @@ class CLIController
 
     # Welcome screen
     def self.welcome_screen
-        puts "Welcome to our awesome project: name TBD"
+        puts "Welcome to:"
+        sleep(0.75)
+        CLI.logo
         #ascii art
         
         #wait times
+        sleep(1)
         self.start_screen
     end
 
@@ -54,7 +57,12 @@ class CLIController
 
     # Opens Main area where the user is able to interact with
     def self.user_portal
-        CLI.prompts.say("Welcome #{CLIUserController.my_name?}")
+        # sleep(0.5)
+        # system "clear"
+        # sleep(0.5)
+        # CLI.prompts.say("Welcome #{CLIUserController.my_name?}")
+        sleep(0.7)
+
         choice = CLI.prompts.select("Where would you like to go?", ["Recipes", "Profile",  "Log Out"])
             case choice
 
@@ -117,7 +125,7 @@ class CLIController
     # Checks <Table :: Recipe>
     def self.recipe_length_check
         CLIUserController.current_user?.reload
-
+        sleep(0.5)
         if CLIUserController.current_user?.user_recipes > 0                 # Checks if the user has any recipes in their <recipes> table
             CLIController.full_recipe_select_menu                           # Selects Full Recipe Menu
         else

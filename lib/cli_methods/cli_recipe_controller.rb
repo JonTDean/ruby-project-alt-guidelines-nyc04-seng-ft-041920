@@ -11,7 +11,7 @@ class RecipeController
         while Recipe.find_by(title: title)
             title = CLI.prompts.ask("Sorry, that name is already taken. Please type another name for your recipe:")
         end
-  
+        sleep(0.5)
         category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Other))
 
         recipe = Recipe.create(user_id: CLIUserController.current_user?.id, title: title, category:category)
@@ -19,26 +19,37 @@ class RecipeController
 
         # ask for all ingredients etc
         # result = CLI.prompts.collect do 
+        sleep(0.5)
         ingredient = IngredientController.choose_an_ingredient      # Returns Ingredient Object
+        sleep(0.5)
         unit = UnitController.choose_a_unit
+        sleep(0.25)
         amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
        
         Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
         # end
-
+        sleep(0.5)
         while CLI.prompts.yes?("Would you like to add another ingredient?")
             ingredient = IngredientController.choose_an_ingredient      # Returns Ingredient Object
-        unit = UnitController.choose_a_unit
-        amount = CLI.prompts.ask("How many #{unit.name} of #{ingredient.name}?", required: true)
-        Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
+            sleep(0.5)
+            unit = UnitController.choose_a_unit
+            sleep(0.25)
+            amount = CLI.prompts.ask("How many #{unit.name} of #{ingredient.name}?", required: true)
+            Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
+            sleep(0.25)
         end
+        sleep(0.5)
         directions = CLI.prompts.ask("Please add recipe instructions:", required: true)
         recipe.update_directions(directions)
 
         #and push to tables with correct ids
-
-        CLI.prompts.ok("You finished creating the recipe")
+        sleep(0.25)
+        CLI.prompts.say("Adding the recipe to our database...")
+        sleep(1)
+        CLI.prompts.ok("You finished creating the recipe:")
+        puts ""
         CLI.prompts.say(recipe.view_recipe.join("\n"))
+        sleep(2)
     end
 
     #action could be delete, update, view 
@@ -48,6 +59,8 @@ class RecipeController
         title = current_user.select_user_recipe_by_title(action)
 
         recipe = Recipe.find_by(title: title)
+
+        sleep(0.5)
         case action
         when "delete"
             recipe.remove_recipe
@@ -58,6 +71,7 @@ class RecipeController
         when "view"
             #view recipe
             CLI.prompts.say(recipe.view_recipe.join("\n"))
+            sleep(2)
 
         when "update"
 
@@ -68,7 +82,7 @@ class RecipeController
 
             index = recipe.view_recipe.index(item)
             # if they are updating the instructions
-            if index = recipe.view_recipe.length - 1
+            if recipe.directions == item #index = recipe.view_recipe.length - 1
                 new_directions = CLI.prompts.ask('What would you like to change it to?', required: true)
 
                 recipe.update(directions: new_directions)
@@ -84,7 +98,6 @@ class RecipeController
                     # update the amount in the corresponding order
                     recipe.orders[index].update(amount: new_amount)
 
-                    #############add something to make sure they don't leave it blank
                 elsif item_part == item.split(" ", 3)[1]
                     #unit
                     #make this a color so easier to see??
@@ -101,6 +114,11 @@ class RecipeController
                     new_ingredient = IngredientController.choose_an_ingredient
                     recipe.orders[index].update(ingredient_id: new_ingredient.id)
                 end
+                sleep(0.5)
+                    puts "Updating recipe in database..."
+                    sleep(0.7)
+                    puts "Recipe successfully updated."
+                    sleep(0.3)
             end
 
             
