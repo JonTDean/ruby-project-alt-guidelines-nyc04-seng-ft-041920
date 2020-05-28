@@ -29,7 +29,7 @@ class RecipeController
         while CLI.prompts.yes?("Would you like to add another ingredient?")
             ingredient = IngredientController.choose_an_ingredient      # Returns Ingredient Object
         unit = UnitController.choose_a_unit
-        amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
+        amount = CLI.prompts.ask("How many #{unit.name} of #{ingredient.name}?", required: true)
         Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
         end
         directions = CLI.prompts.ask("Please add recipe instructions:", required: true)
@@ -109,9 +109,7 @@ class RecipeController
             puts "reached else in case statement"
         end
 
-        CLIController.user_portal
-
-        
+        CLIController.user_portal  
 
     end
 
