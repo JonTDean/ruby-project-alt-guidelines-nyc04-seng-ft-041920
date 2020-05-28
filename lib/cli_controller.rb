@@ -67,7 +67,7 @@ class CLIController
                     CLIController.recipe_length_check
 
                 when "Profile"
-                    CLIController.profile_options_menu                                   # Goes to the Profile Options Menu
+                    CLIController.profile_options_menu                                  # Goes to the Profile Options Menu
 
                 when "Log Out"
                     CLIUserController.log_out?                                          # Sets current_user to nil and Closes the program
