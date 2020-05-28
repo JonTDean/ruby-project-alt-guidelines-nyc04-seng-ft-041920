@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
         case choice 
         when /Yes/
             User.destroy(self.id)                       # Deletes the user from the table
-            Recipe.destroy_all(user_id: self.id)        # Deletes the Recipes associated with the current User
+            Recipe.where("user_id = ?", self.id).delete_all       # Deletes the Recipes associated with the current User
             CLI.prompts.say("Your account, and all recipes associated with your account, have been deleted. Heading towards the Start Menu...")
             CLIController.start_screen                  # Goes to Start Screen
         when /No/
