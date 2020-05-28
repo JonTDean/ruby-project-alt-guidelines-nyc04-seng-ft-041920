@@ -50,10 +50,10 @@ class UserAccountCreation
         puts "==========================================================================================================================="
         puts "Lets Create an Account! In the following menus, enter what do you want your name to be, and what you want your password to be?" 
         puts "==========================================================================================================================="
-        new_user_name =  CLI.prompts.ask("What is your name? Letters only: ") do |q|    # Prompts for User Name
-            q.required true                                                             # Requires Special Properties defined at <q>
-            q.validate /^[a-zA-Z]*$/                                                    # Performs comparison check, if true validate is true if false validate is false
-            q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase)"          # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
+        new_user_name =  CLI.prompts.ask("What is your name? Letters only: ") do |q|                # Prompts for User Name
+            q.required true                                                                         # Requires Special Properties defined at <q>
+            q.validate /^[a-zA-Z\s]*$/                                                              # Performs comparison check, if true validate is true if false validate is false
+            q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase). Spaces Allowed"      # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
         end
 
 
