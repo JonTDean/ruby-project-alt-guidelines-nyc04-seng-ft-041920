@@ -18,11 +18,6 @@ class CLIController
 
     end
 
-    # Log In Menu / User Account Create Menu
-    def self.start_user_auth_process
-        CLIUserController.new
-    end
-
     # Debug Menu
     def self.start_debug_menu
         Deanbug.boot

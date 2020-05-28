@@ -10,7 +10,7 @@ class UserAccountCreation
     #Ask to initate user account creation
     def self.ask_user_create?
         ask_user = "You don't have an account with us! Would you like to create an account? Enter Yes(Create Account), No(Go back to Main Menu), or Quit(Close Program)."
-        answer = CLI.prompts.select(ask_user, CLIHelper.y_n_e) # Prompts user for account creation
+        answer = CLI.prompts.select(ask_user, CLIHelper.y_n_e)    # Prompts user for account creation
 
         # Checks Answer to proceed to the next step
         self.yes_or_no?(answer)
@@ -20,9 +20,9 @@ class UserAccountCreation
     # Yes or No Event handler
     def self.yes_or_no?(answer)
         case answer
-        when /Yes/                                          # if "Yes" goes to account creation
+        when /Yes/                                               # if "Yes" goes to account creation
             self.account_creation 
-        when /No/                                           # Else if "No" Will take you back to the Main Menu."
+        when /No/                                                # Else if "No" Will take you back to the Main Menu."
             CLIController.start_screen
         when /Quit/
             CLI.close
@@ -69,7 +69,7 @@ class UserAccountCreation
     def self.account_to_table(user_name, password)
         puts "Account Created! Going to Main Menu..."
         new_user = User.create(name: user_name, password: password)         # Saves User to user.db
-        CLIUserController.log_in_to_account(new_user)                 # Goes back to User Portal                                 
+        CLIUserController.log_in_to_account(new_user)                       # Goes back to User Portal                                 
     end
     
 end
