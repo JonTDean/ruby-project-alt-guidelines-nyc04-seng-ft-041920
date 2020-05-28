@@ -37,7 +37,7 @@ class UserAccountCreation
         password = UserPassword.create_password                  # Creates Password
 
         # Delete DeanbugMenu after setting up actual menu
-        DeanbugMenu.correct_settings(new_user_name, password)
+        # DeanbugMenu.correct_settings(new_user_name, password)
 
         self.account_to_table(new_user_name, password)           # Saves Account to table
     end
