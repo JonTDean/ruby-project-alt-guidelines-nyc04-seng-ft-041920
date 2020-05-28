@@ -4,7 +4,7 @@ require_relative '../models/cli'
 class RecipeController
     def self.ask_for_recipe_details
 
-        title = CLI.prompts.ask("What is the name of your recipe?")
+        title = CLI.prompts.ask("What is the name of your recipe?", required: true)
 
         # check all the recipes in the database
         # if that name already exists, ask for a new one
@@ -12,7 +12,7 @@ class RecipeController
             title = CLI.prompts.ask("Sorry, that name is already taken. Please type another name for your recipe:")
         end
         sleep(0.5)
-        category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Other))
+        category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Chocolate Candy Other))
 
         recipe = Recipe.create(user_id: CLIUserController.current_user?.id, title: title, category:category)
         recipe_id = recipe.id
@@ -24,7 +24,7 @@ class RecipeController
         sleep(0.5)
         unit = UnitController.choose_a_unit
         sleep(0.25)
-        amount = CLI.prompts.ask("How many #{unit.name}s of #{ingredient.name}?", required: true)
+        amount = CLI.prompts.ask("How many #{unit.name} of #{ingredient.name}?", required: true)
        
         Order.create(recipe_id: recipe_id, unit_id: unit.id, ingredient_id: ingredient.id, amount: amount)
         # end
@@ -48,8 +48,11 @@ class RecipeController
         sleep(1)
         CLI.prompts.ok("You finished creating the recipe:")
         puts ""
-        CLI.prompts.say(recipe.view_recipe.join("\n"))
+        CLI.prompts.say(recipe.pretty_view)
+        puts ""
         sleep(2)
+        
+        
     end
 
     #action could be delete, update, view 
@@ -70,7 +73,8 @@ class RecipeController
         
         when "view"
             #view recipe
-            CLI.prompts.say(recipe.view_recipe.join("\n"))
+            system "clear"
+            CLI.prompts.say(recipe.pretty_view)
             sleep(2)
 
         when "update"
@@ -115,9 +119,12 @@ class RecipeController
                     recipe.orders[index].update(ingredient_id: new_ingredient.id)
                 end
                 sleep(0.5)
+                puts ""
                     puts "Updating recipe in database..."
                     sleep(0.7)
+                    puts ""
                     puts "Recipe successfully updated."
+                    puts ""
                     sleep(0.3)
             end
 
@@ -132,15 +139,30 @@ class RecipeController
     end
 
     def self.show_all_recipes
-        Recipe.all.each do |r|
-             user = User.find_by(id: r.user_id)
-             CLI.prompts.say("Recipe By: #{user.name}", color: :blue)
-             CLI.prompts.say("Recipe Name: #{r.title}", color: :blue)
-             CLI.prompts.say("Recipe Category: #{r.category}", color: :blue)
-             CLI.prompts.say("Recipe Directions: #{r.directions}", color: :blue)
-             puts ""
-             puts ""
-        end
+        # Recipe.all.each do |r|
+        #      user = User.find_by(id: r.user_id)
+        #      CLI.prompts.say("Recipe By: #{user.name}", color: :blue)
+        #      CLI.prompts.say("Recipe Name: #{r.title}", color: :blue)
+        #      CLI.prompts.say("Recipe Category: #{r.category}", color: :blue)
+        #      CLI.prompts.say("Recipe Directions: #{r.directions}", color: :blue)
+        #      puts ""
+        #      puts ""
+        # end
+        test = Recipe.all.map do |r|
+            "Recipe By: #{User.find_by(id: r.user_id).name}\n\
+            Recipe Name: #{r.title}\n\
+            Recipe Category: #{r.category}\n\
+            Recipe Directions: #{r.directions}\n\n\n"
+       end
+        recipe_details = CLI.prompts.select("Which recipe would you like to view? (←/→ arrow keys to view more pages)", test, color: :blue, per_page: 4)
+        index = test.find_index(recipe_details)
+        recipe = Recipe.all[index]
+        
+        sleep(0.5)
+        puts ""
+        recipe.pretty_view
+        puts ""
+        sleep(2)
     end
     
 end

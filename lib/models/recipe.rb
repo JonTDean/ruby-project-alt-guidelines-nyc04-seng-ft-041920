@@ -36,6 +36,7 @@ class Recipe < ActiveRecord::Base
 
         puts "\nDirections:"
         puts "-----------\n#{self.directions}"
+        puts ""
 
     end
 end
