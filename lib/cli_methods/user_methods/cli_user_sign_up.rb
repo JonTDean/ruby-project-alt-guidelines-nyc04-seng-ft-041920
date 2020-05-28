@@ -53,7 +53,15 @@ class UserAccountCreation
             q.validate /^[a-zA-Z]*$/                                                    # Performs comparison check, if true validate is true if false validate is false
             q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase)"          # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
         end
-        
+
+
+        while User.find_by(name: new_user_name)
+            new_user_name =  CLI.prompts.ask("Account Already Exists, please enter a new account ") do |q|    # Prompts for Unique User Name
+                q.required true                                                             # Requires Special Properties defined at <q>
+                q.validate /^[a-zA-Z]*$/                                                    # Performs comparison check, if true validate is true if false validate is false
+                q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase)"          # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
+            end
+        end
         new_user_name
     end
     
