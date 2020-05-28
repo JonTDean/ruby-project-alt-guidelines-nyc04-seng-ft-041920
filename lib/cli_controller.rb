@@ -103,8 +103,8 @@ class CLIController
                CLIController.recipe_length_check
 
             when "Go back to Main Menu"
+                system "clear"
                 CLIController.user_portal
-                
         end
     end
 
@@ -118,6 +118,7 @@ class CLIController
                     CLIController.recipe_length_check
 
                 when "Go back to Main Menu"
+                    system "clear"
                     CLIController.user_portal 
             end
     end
@@ -144,6 +145,7 @@ class CLIController
                 CLIUserController.delete_account
 
             when "Go back to Main Menu"
+                system "clear"
                 CLIController.user_portal
         end
     end

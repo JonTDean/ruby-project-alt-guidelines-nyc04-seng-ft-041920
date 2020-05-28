@@ -30,7 +30,7 @@ class UserPassword
 
     private
 
-    # Checks for correct password
+    #  Hashes password
     def self.secure_password(password)
         BCrypt::Password.create(password)                                  # Creates a Hash of the stored password 
     end

@@ -1,10 +1,17 @@
 require 'faker'
+
+#Encrypts seeded data
+pass = 1234
+hashed_password = UserPassword.secure_password(pass)
+
 #USER #can't really seed user because of bcrypt
-User.create(name: Faker::Name.unique.name, password: "1234")
-User.create(name: Faker::Name.unique.name, password: "1234")
+User.create(name: Faker::Name.unique.name, password: hashed_password)
+User.create(name: Faker::Name.unique.name, password: hashed_password)
 # User.create(name: "testdummy", password: "testdummy")
 # User.create(name: "elisheva", password: "elisheva")
 # User.create(name: "jonny", password: "jonny")
+
+
 
 
 #INGREDIENTS
