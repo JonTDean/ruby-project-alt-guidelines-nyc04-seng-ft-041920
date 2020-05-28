@@ -12,7 +12,7 @@ class RecipeController
             title = CLI.prompts.ask("Sorry, that name is already taken. Please type another name for your recipe:")
         end
   
-        category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Other))
+        category = CLI.prompts.select("Please choose a category", %w(Cake Cookies Pie Cheesecake Frosting Ice\ Cream\ or\ Frozen Pudding Candy Other))
 
         recipe = Recipe.create(user_id: CLIUserController.current_user?.id, title: title, category:category)
         recipe_id = recipe.id
@@ -38,7 +38,7 @@ class RecipeController
         #and push to tables with correct ids
 
         CLI.prompts.ok("You finished creating the recipe")
-        CLI.prompts.say(recipe.view_recipe.join("\n"))
+        CLI.prompts.say(recipe.pretty_view)
     end
 
     #action could be delete, update, view 
@@ -56,14 +56,12 @@ class RecipeController
 
         when "view"
             #view recipe
-            CLI.prompts.say(recipe.view_recipe.join("\n"))
+            CLI.prompts.say(recipe.pretty_view)
 
         when "update"
 
             #update recipe
             item = CLI.prompts.select("Which item would you like to #{action}?", recipe.view_recipe)
-
-
 
             index = recipe.view_recipe.index(item)
             # if they are updating the instructions
@@ -78,15 +76,12 @@ class RecipeController
 
                 # if it is the amount
                 if item_part == item.split(" ", 3)[0]
-                    #amount
                     new_amount = CLI.prompts.ask('What would you like to change it to?', required: true)
                     # update the amount in the corresponding order
                     recipe.orders[index].update(amount: new_amount)
-
-                    #############add something to make sure they don't leave it blank
+                # if they are updating unit
                 elsif item_part == item.split(" ", 3)[1]
-                    #unit
-                    #make this a color so easier to see??
+                    
                     CLI.prompts.ok("You are currently updating #{item}")
                     new_unit = UnitController.choose_a_unit
                     recipe.orders[index].update(unit_id: new_unit.id)
@@ -94,6 +89,7 @@ class RecipeController
                     # display somehow to show it was changed
                     puts "Your edit was successful!"
                     puts "#{recipe.orders[index].amount} #{Unit.find(recipe.orders[index].unit_id).name} #{Ingredient.find(recipe.orders[index].ingredient_id).name}"
+                # if they are updating the ingredient
                 else
                     #ingredient
                     puts "You are currently updating #{item}"
@@ -101,7 +97,6 @@ class RecipeController
                     recipe.orders[index].update(ingredient_id: new_ingredient.id)
                 end
             end
-
 
         else
             #shouldn't get here
