@@ -5,7 +5,12 @@ class IngredientController
     @name = Ingredient.all.map(&:name) # Returns all of the Ingredient names from Ingredient table
 
     def self.choose_an_ingredient      # Returns Ingredient Object
-        choice = CLI.prompts.select("Please choose an Ingredient", @name, per_page: 5)               # Asks user to choose an ingredient
+        CLI.prompts.on(:keypress, echo: false){|event|
+            if event.value == :keyright || event.value == :keyleft
+                system "clear"
+            end
+        }
+        choice = CLI.prompts.select("Please choose an Ingredient (←/→ arrow keys to view more pages)", @name.uniq, per_page: 5,cycle:true, filter:true)               # Asks user to choose an ingredient
         Ingredient.find_by(name: choice)
     end
 
