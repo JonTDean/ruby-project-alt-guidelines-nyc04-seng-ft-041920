@@ -35,7 +35,7 @@ class UserPassword
             true                                                               # Confirms Correct Password 
         else
             CLI.prompts.say("Incorrect Password")
-            CLIUserController.update_account_start(password)                                                                               # Confirms False Password
+            CLIUserController.update_account_start(given_password)                                                                               # Confirms False Password
         end
     end
 

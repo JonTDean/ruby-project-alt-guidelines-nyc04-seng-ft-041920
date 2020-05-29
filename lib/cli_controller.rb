@@ -86,10 +86,10 @@ class CLIController
     # Opens up a selection prompt in order to select recipes.
     def self.full_recipe_select_menu
         
-        message = CLIStyle.cake("What would you like to do?", active_color: :menu)
+        message = CLIStyle.cake("What would you like to do?")
 
         # Recipe Menu
-        choice = CLI.prompts.select(message) do |menu|
+        choice = CLI.prompts.select(message, active_color: :menu) do |menu|
             # Colors in the menu
             menu.choice CLIStyle.colors("View my Recipes", "#C69DD2"), "View my Recipes"
             menu.choice CLIStyle.colors("View All Recipes", "#7ac74f"), "View All Recipes"
