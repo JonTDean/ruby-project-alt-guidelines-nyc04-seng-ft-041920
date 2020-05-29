@@ -28,7 +28,16 @@ class UserPassword
         end
     end
 
-    private
+    # Update Account Password
+    def self.update_check(given_password)
+        if BCrypt::Password.new( CLIUserController.current_user?.password) == given_password    # Compares Hash salts to user input for password
+            CLI.prompts.say("Password Authenticated")     
+            true                                                               # Confirms Correct Password 
+        else
+            CLI.prompts.say("Incorrect Password")
+            CLIUserController.update_account_start(password)                                                                               # Confirms False Password
+        end
+    end
 
     #  Hashes password
     def self.secure_password(password)

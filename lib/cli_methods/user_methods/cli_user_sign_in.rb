@@ -27,9 +27,10 @@ class SignIn
     # Assigns CLIUser a user object
     def self.set_user_state
         if @is_user
+            CLI.prompts.say("User Log In Successful!")
             CLIUserController.log_in_to_account(@current_user)                          # Logs in CLIUserController 
         else
-            puts "User Account Error"                                                   # Error Shouldn't occur but just in case
+            CLI.prompts.say("User Account Error")                                           # Error Shouldn't occur but just in case
         end
     end
 

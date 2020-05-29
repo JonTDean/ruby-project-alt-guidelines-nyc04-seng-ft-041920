@@ -29,6 +29,7 @@ class UserAccountCreation
             system "clear"
             CLIController.start_screen
         when /Quit/
+            system "clear"
             CLI.close
         end
     end
@@ -37,9 +38,6 @@ class UserAccountCreation
     def self.account_creation
         new_user_name = self.create_username                     # Creates Username
         password = UserPassword.create_password                  # Creates Password
-
-        # Delete DeanbugMenu after setting up actual menu
-        # DeanbugMenu.correct_settings(new_user_name, password)
 
         self.account_to_table(new_user_name, password)           # Saves Account to table
     end

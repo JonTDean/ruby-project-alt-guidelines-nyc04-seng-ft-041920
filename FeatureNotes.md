@@ -38,10 +38,6 @@ Quick Notes:
 
 * Delete User: Added a Delete User Function in order to delete and modify table data.
 
-#### TODO
-
-1. Downcase the incoming input of the user for new account creations
-
 --------------------------------------------
 
 ## 2: Debug System - Deanbug
@@ -52,6 +48,4 @@ Quick Notes:
 
 * In place of UserPortal, DeanbugMenu has a default display module
 
-#### TODO
-
-1. Convert Deanbug prompts to use 'TTY' Gem
+* All Menus Converted to TTY

@@ -64,11 +64,15 @@ class CLIUserController
     def self.update_account_start(property)
         case property
         when :password
-            change = CLI.prompts.ask("What do you want to change #{property} to?") do |q|        # Prompts for Password
+            current_password = CLI.prompts.ask("What is your current password #{property}?") do |q|        # Prompts for Password
                 q.required true                                                                  # Requires Special Properties defined at <q>
                 q.validate /^[0-9a-zA-Z]*$/                                                      # Performs comparison check, if true validate is true if false validate is false
                 q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase) and numbers"   # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
             end
+
+            UserPassword.update_check(current_password) # Checks Password for Correct Authetication
+            change = UserPassword.create_password               # Creates the New Password and hashes it
+            @@current_user.update(property => change)   # Modifies the current user's information
         when :name
             CLI.prompts.say("Current Name is: #{CLIUserController.my_name?}")
             change = CLI.prompts.ask("What do you want to change #{property} to?") do |q|        # Prompts for User Name
@@ -76,9 +80,11 @@ class CLIUserController
                 q.validate /^[a-zA-Z]*$/                                                         # Performs comparison check, if true validate is true if false validate is false
                 q.messages[:valid?] = "Please use Letters(Uppercase or Lowercase)"               # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
             end
-        end
 
-        @@current_user.update(property => change)                                                # Modifies the current user's information
+            ## Sets user to <Var :: change>
+            @@current_user.update(property => change) # Modifies the current user's information
+        end
+                 
         CLI.prompts.say("Account has been updated successfully.")
         sleep(0.5)
         CLIController.profile_options_menu                                                       # 
