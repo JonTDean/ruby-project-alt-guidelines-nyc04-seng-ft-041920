@@ -65,7 +65,7 @@ class CLIController
     def self.user_portal
         sleep(0.7)
         message = CLIStyle.cake("Where would you like to go?")
-        choice = CLI.prompts.select(message, ["Recipes", "Profile",  "Log Out"]) do |menu|
+        choice = CLI.prompts.select(message, ["Recipes", "Profile",  "Log Out"], active_color: :menu) do |menu|
             menu.choice CLIStyle.colors("Recipes", "#e8d7f1"), "Recipes"
             menu.choice CLIStyle.colors("Profile", "#5d2e8c"), "Profile"
             menu.choice CLIStyle.colors("Log Out", "#e4b363"), "Log Out"
@@ -86,7 +86,7 @@ class CLIController
     # Opens up a selection prompt in order to select recipes.
     def self.full_recipe_select_menu
         
-        message = CLIStyle.cake("What would you like to do?")
+        message = CLIStyle.cake("What would you like to do?", active_color: :menu)
 
         # Recipe Menu
         choice = CLI.prompts.select(message) do |menu|
@@ -126,14 +126,13 @@ class CLIController
               
 
             when "Go back to Main Menu"
-                system "clear"
-                CLIController.user_portal
+                CLI.back_to_main_menu
         end
     end
 
     # If the user has no Recipes then this Menu prompts them to either create a Recipe or Head back to the main menu.
     def self.recipe_create_menu
-        choice = CLI.prompts.select("You don't have any Recipes! Would you like to Create One?", ["Create a Recipe", "Go back to Main Menu"])
+        choice = CLI.prompts.select("You don't have any Recipes! Would you like to Create One?", ["Create a Recipe", "Go back to Main Menu"], active_color: :menu)
 
             case choice
                 when "Create a Recipe"
@@ -143,8 +142,7 @@ class CLIController
                     
 
                 when "Go back to Main Menu"
-                    system "clear"
-                    CLIController.user_portal 
+                    CLI.back_to_main_menu
             end
     end
 
@@ -161,7 +159,7 @@ class CLIController
     
     # Opens up a selection prompt in order to Traverse User Settings
     def self.profile_options_menu
-        choice = CLI.prompts.select("What would you like to do?", ["Update my Profile", "Delete my Account", "Go back to Main Menu"])
+        choice = CLI.prompts.select("What would you like to do?", ["Update my Profile", "Delete my Account", "Go back to Main Menu"], active_color: :menu)
         case choice
             when "Update my Profile"
                 system "clear"
@@ -172,8 +170,7 @@ class CLIController
                 CLIUserController.delete_account
 
             when "Go back to Main Menu"
-                system "clear"
-                CLIController.user_portal
+                CLI.back_to_main_menu
         end
     end
 end

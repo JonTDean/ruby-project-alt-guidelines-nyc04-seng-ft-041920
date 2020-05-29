@@ -49,6 +49,12 @@ class CLI
         CLIUserController.new
     end
 
+    def self.back_to_main_menu
+        system "clear"
+        self.loading_bar("Heading Back to the Main Menu...")
+        CLIController.user_portal
+    end
+
     ## Exits Program
     def self.close
         self.loading_bar("Exiting Program...")

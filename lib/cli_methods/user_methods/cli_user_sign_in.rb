@@ -30,7 +30,7 @@ class SignIn
             CLI.prompts.say("User Log In Successful!")
             CLIUserController.log_in_to_account(@current_user)                          # Logs in CLIUserController 
         else
-            CLI.prompts.say("User Account Error")                                           # Error Shouldn't occur but just in case
+            CLI.prompts.say("User Account Error")                                       # Error Shouldn't occur but just in case
         end
     end
 

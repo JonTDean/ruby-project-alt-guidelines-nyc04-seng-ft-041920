@@ -45,7 +45,7 @@ class CLIUserController
         message = CLIStyle.cake("Welcome ")
         user = CLIStyle.colors("#{CLIUserController.my_name?}", "#d741a7")
         CLI.prompts.say(message + user)             # Sets State to Logged In
-        CLIController.user_portal
+        CLI.back_to_main_menu
         # DeanbugMenu.who_is?(@@current_user)        # Displays User Screen ## DEBUG 
     end
 
@@ -56,7 +56,7 @@ class CLIUserController
 
     # Update Account 
     def self.update_account_menu
-        property = CLI.prompts.select("What Setting would you like to update?", [:name, :password])
+        property = CLI.prompts.select("What Setting would you like to update?", [:name, :password, "Go Back To Main Menu"])
         self.update_account_start(property)
     end
 
@@ -83,11 +83,14 @@ class CLIUserController
 
             ## Sets user to <Var :: change>
             @@current_user.update(property => change) # Modifies the current user's information
+
+        when "Go back to Main Menu"
+            CLI.back_to_main_menu
         end
                  
         CLI.prompts.say("Account has been updated successfully.")
         sleep(0.5)
-        CLIController.profile_options_menu                                                       # 
+        CLIController.profile_options_menu                                                       #  Head to Profile Options Menu
     end 
     
 end
