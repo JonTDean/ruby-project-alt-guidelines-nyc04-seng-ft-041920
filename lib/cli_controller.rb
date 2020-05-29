@@ -13,19 +13,19 @@ class CLIController
     
     
     def initialize
-        # CLIController.start_user_auth_process
-        CLIController.welcome_screen
+        system "clear"                  # Cleans Screen Up
+        CLIController.welcome_screen    # Goes to Welcome Screen
 
     end
 
     # Debug Menu
     def self.start_debug_menu
-        Deanbug.boot
+        Deanbug.boot                    # Debug Menu portal
     end
 
     # Welcome screen
     def self.welcome_screen
-        puts "Welcome to:"
+        CLI.prompts.say( CLIStyle.cake("Welcome to:"))
         sleep(0.75)
         CLI.logo
         #ascii art
@@ -37,19 +37,25 @@ class CLIController
 
     # User Start Screen
     def self.start_screen
-        choice = CLI.prompts.select("What would you like to do?", %w(Sign\ Up Log\ In Options Exit))
+        message = CLIStyle.cake("What would you like to do?")
+        choice = CLI.prompts.select(message, active_color: :menu) do |menu|
+            menu.choice CLIStyle.colors("Sign Up", "#edffec"), "Sign Up"
+            menu.choice CLIStyle.colors("Log In", "#5d2e8c"), "Log In"
+            menu.choice CLIStyle.colors("Options", "#e4b363"), "Options"
+            menu.choice CLIStyle.colors("Exit", "#06d6a0"), "Exit"
+        end
         
         case choice
-        when "Sign Up"
+        when "Sign Up"                                          # Go to Sign Up menu
             UserAccountCreation.ask_user_create?
 
-        when "Log In"
+        when "Log In"                                           # Go to Log In menu
             SignIn.log_in?
             
-        when "Options"
+        when "Options"                                          # Go to debug menu
             Deanbug.boot
 
-        when "Exit"
+        when "Exit"                                             # Exits the Program
             CLI.close
             
         end
@@ -57,13 +63,13 @@ class CLIController
 
     # Opens Main area where the user is able to interact with
     def self.user_portal
-        # sleep(0.5)
-        # system "clear"
-        # sleep(0.5)
-        # CLI.prompts.say("Welcome #{CLIUserController.my_name?}")
         sleep(0.7)
-
-        choice = CLI.prompts.select("Where would you like to go?", ["Recipes", "Profile",  "Log Out"])
+        message = CLIStyle.cake("Where would you like to go?")
+        choice = CLI.prompts.select(message, ["Recipes", "Profile",  "Log Out"]) do |menu|
+            menu.choice CLIStyle.colors("Recipes", "#e8d7f1"), "Recipes"
+            menu.choice CLIStyle.colors("Profile", "#5d2e8c"), "Profile"
+            menu.choice CLIStyle.colors("Log Out", "#e4b363"), "Log Out"
+        end
             case choice
 
                 when "Recipes"
@@ -79,10 +85,23 @@ class CLIController
 
     # Opens up a selection prompt in order to select recipes.
     def self.full_recipe_select_menu
-        choice = CLI.prompts.select("What would you like to do?", ["View my Recipes", "View All Recipes", "Edit a Recipe", "Create a Recipe", "Delete a Recipe", "Go back to Main Menu"])
+        
+        message = CLIStyle.cake("What would you like to do?")
+
+        # Recipe Menu
+        choice = CLI.prompts.select(message) do |menu|
+            # Colors in the menu
+            menu.choice CLIStyle.colors("View my Recipes", "#C69DD2"), "View my Recipes"
+            menu.choice CLIStyle.colors("View All Recipes", "#7ac74f"), "View All Recipes"
+            menu.choice CLIStyle.colors("Edit a Recipe", "#06d6a0"), "Edit a Recipe"
+            menu.choice CLIStyle.colors("Create a Recipe", "#e4b363"), "Create a Recipe"
+            menu.choice CLIStyle.colors("Delete a Recipe", "#ff3366"), "Delete a Recipe"
+            menu.choice CLIStyle.colors("Go back to Main Menu", "#5d2e8c"), "Go back to Main Menu"
+        end
 
         case choice
             when "View my Recipes"
+                system "clear"
                 RecipeController.show_user_recipes("view")
                 CLIController.recipe_length_check
 
@@ -91,16 +110,20 @@ class CLIController
                 CLIController.recipe_length_check
 
             when "Edit a Recipe"
+                system "clear"
                 RecipeController.show_user_recipes("update")
                 CLIController.recipe_length_check
 
             when "Create a Recipe"
+                system "clear"
                 RecipeController.ask_for_recipe_details
                 CLIController.recipe_length_check
 
             when "Delete a Recipe"
+                system "clear"
                RecipeController.show_user_recipes("delete")
                CLIController.recipe_length_check
+              
 
             when "Go back to Main Menu"
                 system "clear"
@@ -114,8 +137,10 @@ class CLIController
 
             case choice
                 when "Create a Recipe"
+                    system "clear"
                     RecipeController.ask_for_recipe_details
                     CLIController.recipe_length_check
+                    
 
                 when "Go back to Main Menu"
                     system "clear"
@@ -139,9 +164,11 @@ class CLIController
         choice = CLI.prompts.select("What would you like to do?", ["Update my Profile", "Delete my Account", "Go back to Main Menu"])
         case choice
             when "Update my Profile"
+                system "clear"
                 CLIUserController.update_account_menu
                 
             when "Delete my Account"
+                system "clear"
                 CLIUserController.delete_account
 
             when "Go back to Main Menu"

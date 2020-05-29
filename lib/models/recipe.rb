@@ -29,14 +29,18 @@ class Recipe < ActiveRecord::Base
     end
 
     def pretty_view
-        puts "Recipe Name: #{self.title}"        
-        puts "Created By: #{self.user.name}"
-        puts "\nIngredients:\n------------"
-        puts  self.pretty_orders.join("\n")
+        # puts "Recipe Name: #{self.title}"        
+        # puts "Created By: #{self.user.name}"
+        # puts "\nIngredients:\n------------"
+        # puts  self.pretty_orders.join("\n")
 
-        puts "\nDirections:"
-        puts "-----------\n#{self.directions}"
+        # puts "\nDirections:"
+        # puts "-----------\n#{self.directions}"
         puts ""
+        CLI.prompts.say(CLI.pretty_view_table(self.title, self.user.name, self.pretty_orders.join("\n"), self.directions))
+        CLI.prompts.say("\nIngredients:\n------------")
+        CLI.prompts.say(self.pretty_orders.join("\n"))
+        CLI.prompts.say("\n\n\n")
 
     end
 end

@@ -7,7 +7,13 @@ class User < ActiveRecord::Base
     end
 
     def select_user_recipe_by_title(action)
-        CLI.prompts.select("Please select one of your recipes to #{action}", self.user_recipe_titles)
+        choice = CLI.prompts.select("Please select one of your recipes to #{action}", self.user_recipe_titles + ["Back to Main Menu"])
+        case choice
+        when "Back to Main Menu"
+            CLIController.user_portal  
+        else 
+            choice
+        end            
     end
 
     def user_recipes

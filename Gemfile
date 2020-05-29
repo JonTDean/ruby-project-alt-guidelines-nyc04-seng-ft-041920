@@ -14,6 +14,9 @@ gem "faker"
 gem 'bcrypt'
 gem 'tty-prompt'
 gem 'tty-progressbar'
+gem 'paint'
+gem 'rainbow', '~> 3.0'
+gem 'tty-table'
 
 ## Not In Use
 gem 'tty-reader'

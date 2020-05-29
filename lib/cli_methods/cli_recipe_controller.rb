@@ -3,7 +3,12 @@ require_relative '../models/cli'
 
 class RecipeController
     def self.ask_for_recipe_details
-
+       CLI.prompts.on(:keypress, echo: false){|event|
+            if event.value == "`"
+                CLIController.user_portal 
+                system "clear"
+            end
+        }
         title = CLI.prompts.ask("What is the name of your recipe?", required: true)
 
         # check all the recipes in the database
@@ -58,7 +63,6 @@ class RecipeController
     #action could be delete, update, view 
     def self.show_user_recipes(action)
         current_user = CLIUserController.current_user?
-        # title = CLI.prompts.select("Which recipe would you like to #{action}?", current_user.user_recipe_titles)
         title = current_user.select_user_recipe_by_title(action)
 
         recipe = Recipe.find_by(title: title)
@@ -67,13 +71,16 @@ class RecipeController
         case action
         when "delete"
             recipe.remove_recipe
+            
             CLI.prompts.say("Recipe has been deleted.")
+
             # current_user.user_recipe_titles
 
         
         when "view"
             #view recipe
             system "clear"
+            CLI.loading_bar("Loading...")
             CLI.prompts.say(recipe.pretty_view)
             sleep(2)
 
@@ -127,27 +134,19 @@ class RecipeController
                     puts ""
                     sleep(0.3)
             end
-
             
         else
             #shouldn't get here
             puts "reached else in case statement"
         end
 
+        
         CLIController.user_portal  
 
     end
 
     def self.show_all_recipes
-        # Recipe.all.each do |r|
-        #      user = User.find_by(id: r.user_id)
-        #      CLI.prompts.say("Recipe By: #{user.name}", color: :blue)
-        #      CLI.prompts.say("Recipe Name: #{r.title}", color: :blue)
-        #      CLI.prompts.say("Recipe Category: #{r.category}", color: :blue)
-        #      CLI.prompts.say("Recipe Directions: #{r.directions}", color: :blue)
-        #      puts ""
-        #      puts ""
-        # end
+
         test = Recipe.all.map do |r|
             "Recipe By: #{User.find_by(id: r.user_id).name}\n\
             Recipe Name: #{r.title}\n\
@@ -155,22 +154,24 @@ class RecipeController
             Recipe Directions: #{r.directions}\n\n\n"
        end
        
-       CLI.prompts.on(:keypress, echo: false){|event|
-            if event.value == :keyright || event.value == :keyleft
-                system "clear"
-            end
-        }
+    #    CLI.prompts.on(:keypress, echo: false){|event|
+    #         if event.value == :keyright || event.value == :keyleft
+    #             system "clear"
+    #         end
+    #     }
 
         recipe_details = CLI.prompts.select("Which recipe would you like to view? (←/→ arrow keys to view more pages)", test, color: :blue, per_page: 3)
+        system "clear"
 
         index = test.find_index(recipe_details)
         recipe = Recipe.all[index]
-        
-        sleep(0.5)
+        puts ""
+
+        CLI.loading_bar("Loading...")
         puts ""
         recipe.pretty_view
-        puts ""
-        sleep(2)
+        sleep(0.5)
+        
     end
     
 end

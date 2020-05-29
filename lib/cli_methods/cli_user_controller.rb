@@ -42,7 +42,9 @@ class CLIUserController
         sleep(0.5)
         system "clear"
         sleep(0.5)
-        CLI.prompts.say("Welcome #{CLIUserController.my_name?}")             # Sets State to Logged In
+        message = CLIStyle.cake("Welcome ")
+        user = CLIStyle.colors("#{CLIUserController.my_name?}", "#d741a7")
+        CLI.prompts.say(message + user)             # Sets State to Logged In
         CLIController.user_portal
         # DeanbugMenu.who_is?(@@current_user)        # Displays User Screen ## DEBUG 
     end

@@ -2,6 +2,7 @@ class Deanbug
 
     # Boots to Deanbug Menus
     def self.boot
+        system "clear"
         self.main_menu                                    # Welcome menu, displays available choices
     end
 
@@ -10,10 +11,12 @@ class Deanbug
     def self.main_menu
        choice = CLI.prompts.select("What Menu Would you like to go to?", DeanbugData.main_menu_choices) # Displays interactables, and allows choice input
        DeanbugData.main_menu_logic(choice)
+       system "clear"
     end
 
     # Displays Log Menu Controller
     def self.log_menu
+        system "clear"
         CLI.prompts.say("Welcome to the Debug-Log Menu.")
         
         #Begins Log Menu Prompt

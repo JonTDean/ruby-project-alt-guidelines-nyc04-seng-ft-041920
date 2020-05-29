@@ -6,7 +6,9 @@ class SignIn
     private :is_user, :is_valid
 
     def self.log_in?    
-        username = CLI.prompts.ask("What is your username?")  
+        system "clear"
+        message =  CLIStyle.colors("What is your Username?", "#77d7c9")
+        username = CLI.prompts.ask(message)  
         # If name is in database then prompt for password else prompt for create an account
         if User.exists?(name: username)                     # Checks to see if the User Exists 
             @current_user = User.find_by(name: username)    # Grabs user object
@@ -33,7 +35,8 @@ class SignIn
 
     # Asks for Password then does comparison check for simple Authorization
     def self.ask_for_password
-        password = CLI.prompts.mask("What is your password") do |q|
+        message =  CLIStyle.colors("What is your password", "#77d7c9")
+        password = CLI.prompts.mask(message, color: :blue) do |q|
             q.required true                                                             # Requires Special Properties defined at <q>
             q.validate /^[0-9a-zA-Z]*$/                                                 # Performs comparison check, if true validate is true if false validate is false
             q.messages[:valid?] = @is_valid                                             # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
@@ -46,8 +49,9 @@ class SignIn
     def self.password_check(typed_password)
         if  UserPassword.check_password(typed_password, @current_user)                  # Checks if user password is correct
             true
-        else                                                                            # If user password is incorrect then ask for password recursively.
-            password = CLI.prompts.mask("Please Enter The correct Password.") do |q|
+        else    
+            message =  CLIStyle.colors("Please Enter The correct Password.", "#26547c")                                                                        # If user password is incorrect then ask for password recursively.
+            password = CLI.prompts.mask(message) do |q|
                 q.required true                                                         # Requires Special Properties defined at <q>
                 q.validate /^[0-9a-zA-Z]*$/                                             # Performs comparison check, if true validate is true if false validate is false
                 q.messages[:valid?] = @is_valid                                         # Set custom <valid?> Property https://www.rubydoc.info/gems/tty-prompt/TTY%2FPrompt%2Emessages
